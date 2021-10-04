@@ -12,13 +12,28 @@ services:
     networks:
       - net
   backend:
-    image: maven:3.6.3-jdk-8
-    command: mvn spring-boot:run
+    container_name: backend
+    build:
+      context: backend
+      dockerfile: Dockerfile
+    image: hoovereats:latest
     ports:
-      - 8082:8082
+      - 8081:8081
+    networks:
+      - net
+
+  frontend:
+    container_name: frontend
+    build: ./frontend
     volumes:
-      - .:/usr/src/mymaven:rw
-    working_dir: /usr/src/mymaven
+      - './:/app'
+      - '/app/node_modules'
+    ports:
+      - 3000:3000
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    command: npm start
 
 networks:
   net:
