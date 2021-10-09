@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: springuser
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/dev
+    password: ThePassword
+  jpa:
+    hibernate:
+      ddl-auto: update
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: google-client-id
+#            client-secret: google-client-secret
+server:
+  ssl:
+    key-store: classpath:springboot.p12
+    key-store-password: password
+    key-store-type: pkcs12
+    key-alias: springboot
+    key-password: password
+  port: 2202
