@@ -1,0 +1,33 @@
+<configuration>
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d [%X{reqid}] %-5level [%thread] %logger - %msg%n%throwable</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="stdout"/>
+    </root>
+
+    <!-- log to files-->
+    <property name="LOG_FILE" value="hoovereats"/>
+    <property name="LOG_DIR" value="log"/>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${LOG_FILE}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>${LOG_DIR}/${LOG_FILE}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- keep 30 days' worth of history capped at 10GB total size -->
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d [%X{reqid}] %-5level [%thread] %logger - %msg%n%throwable</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.hoovereats" level="INFO" additivity="false">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+</configuration>
