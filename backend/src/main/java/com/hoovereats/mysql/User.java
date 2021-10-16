@@ -1,26 +1,46 @@
 package com.hoovereats.mysql;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Integer id;
+	private String uid;
 
 	private String name;
 
+	private String username;
+
 	private String email;
 
-	public Integer getId() {
-		return id;
+	private String type;
+
+	@Column(name = "grad_year")
+	private Integer gradYear;
+
+	private String major;
+
+	public User() {
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public User(String uid, String name, String username, String email, String type, Integer gradYear, String major) {
+		this.uid = uid;
+		this.name = name;
+		this.username = username;
+		this.email = email;
+		this.type = type;
+		this.gradYear = gradYear;
+		this.major = major;
+	}
+
+	public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public String getName() {
@@ -31,6 +51,14 @@ public class User {
 		this.name = name;
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -38,4 +66,42 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Integer getGradYear() {
+		return gradYear;
+	}
+
+	public void setGradYear(Integer gradYear) {
+		this.gradYear = gradYear;
+	}
+
+	public String getMajor() {
+		return major;
+	}
+
+	public void setMajor(String major) {
+		this.major = major;
+	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+				"uid='" + uid + '\'' +
+				", name='" + name + '\'' +
+				", username='" + username + '\'' +
+				", email='" + email + '\'' +
+				", type='" + type + '\'' +
+				", gradYear=" + gradYear +
+				", major='" + major + '\'' +
+				'}';
+	}
+
 }
