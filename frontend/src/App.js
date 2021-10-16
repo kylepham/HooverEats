@@ -13,6 +13,7 @@ import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import Login from "./pages/Login/Login";
 import Profile from "./pages/Profile/Profile";
+import NavBar from "./components/NavBar/NavBar";
 
 function App() {
   const {
@@ -52,7 +53,8 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <div className="nav-bar">
+      <NavBar info={info} />
+        {/* <div className="nav-bar">
           <Link to="/" className="nav-link">
             Home
           </Link>
@@ -69,22 +71,22 @@ function App() {
           <Link to="/about" className="nav-link">
             About
           </Link>
-        </div>
+        </div> */}
 
         <Switch>
           <Route exact path="/">
             <Home />
           </Route>
 
-          <Route exact path="/login">
+          <Route path="/login">
             <Login />
           </Route>
 
-          <Route exact path="/me">
+          <Route path="/me">
             <Profile me={true} />
           </Route>
 
-          <Route exact path="/about">
+          <Route path="/about">
             <About />
           </Route>
 
