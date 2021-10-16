@@ -1,0 +1,25 @@
+.About__container {
+  margin: 4rem;
+}
+
+.About__description {
+  text-align: center;
+  margin: auto 10rem;
+}
+
+.About__description p {
+  color: var(--background-color);
+  text-align: justify;
+}
+
+.About__intro {
+  text-align: center;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.About__description h1 {
+  color: var(--main-color);
+  padding-bottom: 1.5rem;
+  font-size: 2rem;
+}

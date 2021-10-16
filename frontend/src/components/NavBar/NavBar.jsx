@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./NavBar.css";
+import styles from "./NavBar.module.css";
 import logo from "../../images/logo.png";
 import { Link } from "react-router-dom";
 
@@ -16,42 +16,28 @@ export default function NavBar({ info }) {
 
   window.addEventListener("scroll", changeBackground);
   return (
-    <nav className={nav ? "nav active" : "nav"}>
-      <Link to="/" className="logo">
+    <nav className={`${styles.nav} ${nav ? styles.active : ""}`}>
+      <Link to="/" className={styles.logo}>
         <img src={logo} alt="" />
       </Link>
-      <input className="menu-btn" type="checkbox" id="menu-btn" />
-      <label className="menu-icon" for="menu-btn">
-        <span className="nav-icon"></span>
-      </label>
-      <ul className="menu">
+      <ul className={styles.menu}>
         <li>
-          <Link to="/" smooth={true} duration="1000">
-            Home
-          </Link>
+          <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/about" smooth={true} duration="1000">
-            About
-          </Link>
+          <Link to="/about">About</Link>
         </li>
         <li>
-          <a href="#contact__section" behavior="smooth" duration="5000">
-            Contact
-          </a>
+          <Link to="/contact">Contact</Link>
         </li>
         {!info && (
           <li>
-            <Link to="/login" smooth={true} duration="1000">
-              Sign in
-            </Link>
+            <Link to="/login">Sign in</Link>
           </li>
         )}
         {info && (
           <li>
-            <Link to="/me" smooth={true} duration="1000">
-              My Profile
-            </Link>
+            <Link to="/me">My Profile</Link>
           </li>
         )}
       </ul>

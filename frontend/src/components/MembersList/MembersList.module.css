@@ -1,0 +1,36 @@
+.memberList {
+  text-align: center;
+}
+
+.memberList h1 {
+  color: var(--main-color);
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.memberList__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 6rem;
+}
+
+.memberTag {
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+  background-color: var(--background-color);
+  border-radius: 25px;
+  width: 17rem;
+  justify-content: center;
+}
+
+.memberTag__img img {
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+}
+
+.memberTag__text p {
+  color: var(--main-color);
+}
