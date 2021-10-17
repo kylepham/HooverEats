@@ -1,18 +1,17 @@
-import { useContext, useEffect } from "react";
-// import styles from "./Home.module.css";
-import { AuthContext } from "../../contexts/AuthContext";
+import Download from "../../components/Download/Download";
+import Feature from "../../components/Feature/Feature";
+import Header from "../../components/Header/Header";
+import About from "../../components/About/About";
+import Contact from "../../components/Contact/Contact";
 
 export default function Home() {
-  const {
-    user: { info },
-  } = useContext(AuthContext);
-
-  useEffect(() => {}, []);
-
   return (
     <div>
-      <h1>Thí í homepage</h1>
-      {info && <h2>You're logged in. Your name is {info.name}</h2>}
+      <Header />
+      <Feature />
+      <Download />
+      <About />
+      <Contact />
     </div>
   );
 }
