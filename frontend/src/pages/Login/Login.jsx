@@ -1,8 +1,7 @@
 import { useContext } from "react";
-import { signIn } from "../../firebase";
 import { Redirect } from "react-router";
 import { AuthContext } from "../../contexts/AuthContext";
-// import axios from "axios";
+import SignIn from "../../components/SignIn/SignIn";
 
 export default function Login() {
   const {
@@ -13,7 +12,7 @@ export default function Login() {
 
   return (
     <div>
-      <button onClick={signIn}>Sign in with Google</button>
+      <SignIn />
     </div>
   );
 }
