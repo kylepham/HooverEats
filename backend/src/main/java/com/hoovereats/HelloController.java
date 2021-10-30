@@ -10,7 +10,7 @@ public class HelloController {
 	Logger logger = LoggerFactory.getLogger(HelloController.class);
 	@GetMapping("/")
 	public String index() {
-		logger.info("logging");
+//		logger.info("logging");
 		return "Greetings from Spring Boot!";
 	}
 

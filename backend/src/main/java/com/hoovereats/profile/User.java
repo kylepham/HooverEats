@@ -1,4 +1,4 @@
-package com.hoovereats.mysql;
+package com.hoovereats.profile;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +15,9 @@ public class User {
 
 	private String email;
 
-	private String type;
+	private String occupation;
+
+	private Swipe type;
 
 	@Column(name = "grad_year")
 	private Integer gradYear;
@@ -25,11 +27,12 @@ public class User {
 	public User() {
 	}
 
-	public User(String uid, String name, String username, String email, String type, Integer gradYear, String major) {
+	public User(String uid, String name, String username, String email, String occupation, Swipe type, Integer gradYear, String major) {
 		this.uid = uid;
 		this.name = name;
 		this.username = username;
 		this.email = email;
+		this.occupation = occupation;
 		this.type = type;
 		this.gradYear = gradYear;
 		this.major = major;
@@ -67,11 +70,19 @@ public class User {
 		this.email = email;
 	}
 
-	public String getType() {
+	public String getOccupation() {
+		return occupation;
+	}
+
+	public void setOccupation(String occupation) {
+		this.occupation = occupation;
+	}
+
+	public Swipe getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(Swipe type) {
 		this.type = type;
 	}
 

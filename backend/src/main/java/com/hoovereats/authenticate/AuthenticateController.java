@@ -1,19 +1,16 @@
 package com.hoovereats.authenticate;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
-import com.hoovereats.mysql.User;
-import com.hoovereats.mysql.UserRepository;
-import org.hibernate.Session;
+
+import com.hoovereats.profile.Swipe;
+import com.hoovereats.profile.User;
+import com.hoovereats.profile.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
-import java.util.*;
 
 @RestController
 public class AuthenticateController {
@@ -23,7 +20,7 @@ public class AuthenticateController {
 	@Autowired
 	UserRepository userRepository;
 	@PostMapping("/auth")
-	public void index(@RequestHeader Map<String, String> headers, @RequestAttribute("userRecord") UserRecord userRecord){
+	public void index(@RequestAttribute("userRecord") UserRecord userRecord){
 		User user;
 		String uid = userRecord.getUid();
 		try {
@@ -33,9 +30,9 @@ public class AuthenticateController {
 				String defaultUsername = email.substring(0, email.indexOf('@'));
 				if (email.contains("_")) {
 					int gradYear = Integer.parseInt(email.substring(email.indexOf('_') + 1, email.indexOf('@')));
-					user = new User(uid, userRecord.getDisplayName(), defaultUsername, userRecord.getEmail(), "student", gradYear, null);
+					user = new User(uid, userRecord.getDisplayName(), defaultUsername, userRecord.getEmail(), "student", Swipe.NEITHER,  gradYear, null);
 				} else {
-					user = new User(uid, userRecord.getDisplayName(), defaultUsername, userRecord.getEmail(), "faculty", null, null);
+					user = new User(uid, userRecord.getDisplayName(), defaultUsername, userRecord.getEmail(), "faculty", Swipe.NEITHER, null, null);
 				}
 				userRepository.save(user);
 				logger.info("New User Created " + user);
