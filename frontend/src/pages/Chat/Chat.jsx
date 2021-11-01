@@ -19,6 +19,7 @@ const Conversation = ({ conversation, chosenId, ...rest }) => {
     >
       <img src={conversation.recipientPhotoUrl} alt="" />
       <p>{conversation.recipientName}</p>
+      <p>{conversation.timestamp}</p>
     </div>
   );
 };
@@ -249,9 +250,9 @@ export default function Chat() {
     // choose seeing the first conversation (if existed)
     (async () => {
       const allConversations = await getAllConversations();
-      setConversations(allConversations);
+      setConversations(allConversations.sort((prev, next) => (new Date(next.timestamp)) - (new Date(prev.timestamp))));
       setConversationId(0);
-      onConversationClick(allConversations[0]?.id);
+      await onConversationClick(allConversations[0]?.id);
       setRecipientUid(allConversations[0]?.recipientUid);
       setRecipientName(allConversations[0]?.recipientName);
     })();
@@ -267,19 +268,30 @@ export default function Chat() {
           "/user/" + info.uid + "/queue/messages",
           ({ body }) => {
             body = JSON.parse(body);
-            setConversationDict((dict) => {
-              // console.log(body);
-              // console.log(dict);
-              // console.log(body["conversationId"]);
-              const messages = dict[body["conversationId"]];
-              console.log(messages);
-              messages.push(body);
-              dict[body["conversationId"]] = messages;
-              return { dict };
-            });
-          }
-        );
-      },
+            setConversationId(conversationId => {
+
+              setConversationDict(dict => {
+                console.log(body);
+                console.log(dict);
+                console.log(body["conversationId"]);
+                if (body['conversationId'] === conversationId) {
+                  let messages = dict[body["conversationId"]];
+                  console.log(messages);
+                  messages.push(body);
+                  dict[body["conversationId"]] = messages;
+                }
+                return {...dict};
+              })
+
+              setConversations(conversations => {
+                const conversation = conversations.filter(conversation => conversation.id === body['conversationId'])[0];
+                conversation.timestamp = body["timestamp"]
+                return conversations.sort((prev, next) => (new Date(next.timestamp)) - (new Date(prev.timestamp)))
+              })
+              return conversationId
+            }
+          )})
+        },
       reconnectDelay: 10000,
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
