@@ -11,10 +11,10 @@ function Feature() {
     <div className='features'>
       <h1>Features</h1>
       <div className='a-container'>
-        <FeatureBox image={fimage1} title='Cheap' content=''/>
-        <FeatureBox image={fimage2} title='Savings' content=''/>
-        <FeatureBox image={fimage3} title='Cheap' content=''/>
-        <FeatureBox image={fimage4} title='Share' content=''/>
+        <FeatureBox image={fimage1} title='Free swipes' content='Build up networking'/>
+        <FeatureBox image={fimage2} title='Graduation' content='Connect with upper classes'/>
+        <FeatureBox image={fimage3} title='Work' content='Refer an internship'/>
+        <FeatureBox image={fimage4} title='Study' content='Find your study buddy'/>
       </div>
     </div>
   )
