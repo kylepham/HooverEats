@@ -1,0 +1,23 @@
+.features{
+  width:100%;
+  height:120vh;
+  box-sizing: border-box;
+  font-family:'Lato';
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 40px ;
+  background-color: var(--dark-color);
+}
+.features h1{
+  color: var(--background-color);
+  font-size: 3rem;
+}
+.a-container{
+  display: flex;
+  justify-content: center;
+  align-content: center;
+
+
+}

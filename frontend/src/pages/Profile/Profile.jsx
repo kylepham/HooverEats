@@ -11,12 +11,20 @@ export default function Profile({ me }) {
   if (!info) return <Redirect to="/" />;
 
   return (
-    <div>
-      <p>Hle</p>
+    <div>   
       <br></br>
       <br></br>
       <br></br>
       <br></br>
+      <br></br>
+      <div>
+        <div>
+          <img src="" alt="" />
+        </div>
+        <div>
+          
+        </div>
+      </div>
       <button onClick={signOut}>Sign Out</button>
     </div>
   );

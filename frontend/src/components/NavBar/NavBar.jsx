@@ -1,8 +1,8 @@
 
-import React, {useState} from 'react'
+import React, {useState} from 'react';
 import './NavBar.css';
-import logo from '../../images/logo.png'
-import {Link} from 'react-router-dom'
+import logo from '../../images/logo.png';
+import {Link} from 'react-router-dom';
 
 export default function NavBar({ info }) {
 

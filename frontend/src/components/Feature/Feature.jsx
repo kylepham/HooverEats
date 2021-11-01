@@ -1,9 +1,10 @@
-import React from 'react'
-import FeatureBox from '../FeatureBox/FeatureBox'
-import fimage1 from '../../images/handshake.svg'
-import fimage2 from '../../images/graduation.svg'
-import fimage3 from '../../images/work.svg'
-import fimage4 from '../../images/books.svg'
+import React from 'react';
+import './Feature.css';
+import FeatureBox from '../FeatureBox/FeatureBox';
+import fimage1 from '../../images/handshake.svg';
+import fimage2 from '../../images/graduation.svg';
+import fimage3 from '../../images/work.svg';
+import fimage4 from '../../images/books.svg';
 
 function Feature() {
   return (
