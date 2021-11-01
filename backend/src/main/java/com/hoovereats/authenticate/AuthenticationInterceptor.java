@@ -2,6 +2,7 @@ package com.hoovereats.authenticate;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseToken;
+import com.hoovereats.utils.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -18,6 +19,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			throws Exception {
 
 		if(!request.getMethod().equalsIgnoreCase("POST") && !request.getMethod().equalsIgnoreCase("GET")){
+			return true;
+		}
+
+		if(request.getContextPath().contains("debug")){
 			return true;
 		}
 

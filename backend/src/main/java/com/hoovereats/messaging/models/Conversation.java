@@ -15,16 +15,22 @@ public class Conversation {
 	private String senderUid;
 	@Column(name = "sender_name")
 	private String senderName;
+	@Column(name = "sender_photo_url")
+	private String senderPhotoUrl;
 	@Column(name = "recipient_uid")
 	private String recipientUid;
 	@Column(name = "recipient_name")
 	private String recipientName;
+	@Column(name = "recipient_photo_url")
+	private String recipientPhotoUrl;
 
-	public Conversation(String senderUid, String senderName, String recipientUid, String recipientName) {
+	public Conversation(String senderUid, String senderName, String senderPhotoUrl, String recipientUid, String recipientName, String recipientPhotoUrl) {
 		this.senderUid = senderUid;
 		this.senderName = senderName;
+		this.senderPhotoUrl = senderPhotoUrl;
 		this.recipientUid = recipientUid;
 		this.recipientName = recipientName;
+		this.recipientPhotoUrl = recipientPhotoUrl;
 	}
 
 	public Conversation() {
@@ -55,6 +61,14 @@ public class Conversation {
 		this.senderName = senderName;
 	}
 
+	public String getSenderPhotoUrl() {
+		return senderPhotoUrl;
+	}
+
+	public void setSenderPhotoUrl(String senderPhotoUrl) {
+		this.senderPhotoUrl = senderPhotoUrl;
+	}
+
 	public String getRecipientUid() {
 		return recipientUid;
 	}
@@ -71,15 +85,11 @@ public class Conversation {
 		this.recipientName = recipientName;
 	}
 
-	@Override
-	public String toString() {
-		return "Conversation{" +
-				"id=" + id +
-				", senderUid='" + senderUid + '\'' +
-				", senderName='" + senderName + '\'' +
-				", recipientUid='" + recipientUid + '\'' +
-				", recipientName='" + recipientName + '\'' +
-				'}';
+	public String getRecipientPhotoUrl() {
+		return recipientPhotoUrl;
 	}
 
+	public void setRecipientPhotoUrl(String recipientPhotoUrl) {
+		this.recipientPhotoUrl = recipientPhotoUrl;
+	}
 }
