@@ -14,7 +14,7 @@
   color: var(--background-color);
   font-size: 3rem;
 }
-.a-container{
+.a__container{
   display: flex;
   justify-content: center;
   align-content: center;

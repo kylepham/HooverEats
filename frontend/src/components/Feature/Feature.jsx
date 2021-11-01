@@ -10,7 +10,7 @@ function Feature() {
   return (
     <div className='features'>
       <h1>Features</h1>
-      <div className='a-container'>
+      <div className='a__container'>
         <FeatureBox image={fimage1} title='Free swipes' content='Build up networking'/>
         <FeatureBox image={fimage2} title='Graduation' content='Connect with upper classes'/>
         <FeatureBox image={fimage3} title='Work' content='Refer an internship'/>

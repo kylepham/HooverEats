@@ -9,7 +9,7 @@
   text-align: center;
 }
 
-.dl-heading{
+.dl__heading{
   text-align: center;
   font-family:'Lato';
   width: 600px;
@@ -18,29 +18,29 @@
   top: 55%;
   transform: translate(-50%,-55%);
 }
-.dl-heading span{
+.dl__heading span{
   color: var(--main-color);
 }
-.dl-heading .details{
+.dl__heading .details{
   font-size: 23px;
   color: var(--main-color);
 }
-.dl-heading .details{
+.dl__heading .details{
   font-size: 1.2rem;
 }
-.dl-heading h1{
+.dl__heading h1{
 font-family:'Lato';
 font-size: 4rem;
 margin:0px;
 letter-spacing: 2px;
 color:var(--background-color);
 }
-.dl-btns{
+.dl__btns{
   display: flex;
   margin-top: 40px;
   text-align: center;
 }
-.dl-btn1{
+.dl__btn1{
   width: 50%;
   height: auto;
   display: flex;
@@ -55,7 +55,7 @@ color:var(--background-color);
   padding: 0.5rem 1rem;
 }
 
-.dl-btn1:hover{
+.dl__btn1:hover{
 background-color: transparent;
   transition: all ease 0.1s;
   color: var(--main-color);
@@ -63,7 +63,7 @@ background-color: transparent;
   box-shadow: 5px 10px 30px rgba(198, 184, 64, 0.411);
 }
 
-.dl-btn2{
+.dl__btn2{
   width: 50%;
   height: auto;
   display: flex;
@@ -78,7 +78,7 @@ background-color: transparent;
   margin: 1rem;
   padding: 0.5rem 1rem;
 }
-.dl-btn2:hover{
+.dl__btn2:hover{
   background-color: var(--main-color);
   transition: all ease 0.1s;
   color: var(--background-color);

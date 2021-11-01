@@ -1,4 +1,4 @@
-.a-box{
+.a__box{
   width:250px;
   height: 400px;
   margin: 20px;
@@ -6,22 +6,22 @@
   overflow: hidden;
   transition: 0.1s ease-in-out;
 }
-.a-b-img{
+.a__b-img{
   width: 60%;
   height: auto;
   margin: auto;
 }
-.a-b-img img{
+.a__b-img img{
   padding: 15px;
   width:100%;
   height: 50%;
   margin-top: 40px;
 }
-.a-box:hover{
+.a__box:hover{
   border: 1px solid var(--main-color);
   box-shadow: 2px 2px 12px rgba(198, 184, 64, 0.411);
 }
-.a-b-text{
+.a__b-text{
   width: 100%;
   height: 40%;
   background-color:var(--dark-color);
@@ -31,10 +31,10 @@
   text-align: center;
   flex-direction: column;
 }
-.a-b-text h2{
+.a__b-text h2{
   color: var(--background-color);
 }
-.a-b-text p{
+.a__b-text p{
   margin: 0px;
   color:#ffffffa6;
   font-size: 1.1rem;
@@ -49,9 +49,9 @@
   text-overflow: ellipsis;
   margin-bottom: 10px;
 }
-.a-b-text p:hover{
+.a__b-text p:hover{
   color:var(--background-color);
 }
-.a-b-text a{
+.a__b-text a{
   margin-top:15px ;
 }

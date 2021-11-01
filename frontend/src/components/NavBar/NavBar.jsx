@@ -23,9 +23,9 @@ export default function NavBar({ info }) {
       <Link to='/' className='logo'>
         <img src={logo} alt="" />
       </Link>
-      <input className='menu-btn' type="checkbox" id='menu-btn'/>
-      <label className='menu-icon' for='menu-btn'>
-        <span className='nav-icon'></span>
+      <input className='menu__btn' type="checkbox" id='menu-btn'/>
+      <label className='menu__icon' for='menu__btn'>
+        <span className='nav__icon'></span>
       </label>
       <ul className='menu'>
         <li><Link to='/' smooth={true} duration='1000'>Home</Link></li>
