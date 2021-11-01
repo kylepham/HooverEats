@@ -91,10 +91,10 @@ a {
   text-decoration: none;
 }
 
-button {
+/* button {
   outline: none;
   border: none;
-}
+} */
 
 input {
   outline: none;
@@ -134,8 +134,7 @@ nav {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  position: fixed;
-  left: 0;
+  position: sticky;
   top: 0;
   width: 100%;
   z-index: 1;
@@ -447,7 +446,7 @@ nav .menu-btn, .menu-icon {
   color: #cecece;
 }
 
-.about-text button {
+.about-text > button {
   margin-top: 20px;
   width: 140px;
   height: 45px;
@@ -458,7 +457,7 @@ nav .menu-btn, .menu-icon {
   background-color: var(--main-color);
 }
 
-.about-text button:hover {
+.about-text > button:hover {
   box-shadow: 5px 10px 30px rgba(198, 184, 64, 0.411);
   background-color: var(--dark-color);
   transition: all ease 0.3s;

@@ -54,6 +54,13 @@ export default function NavBar({ info }) {
             </Link>
           </li>
         )}
+        {info && (
+          <li>
+            <Link to="/chat" smooth={true} duration="1000">
+              Chat
+            </Link>
+          </li>
+        )}
       </ul>
     </nav>
   );
