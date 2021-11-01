@@ -50,7 +50,13 @@ const Message = ({ message, isMe }) => {
 };
 
 const CurrentConversation = ({ conversation, messages, onSend, info }) => {
+  console.log("currentMessages:", messages);
   const [message, setMessage] = useState("");
+
+  const sendMessage = () => {
+    onSend(message);
+    setMessage("");
+  };
   return (
     <>
       <div className={styles.chat_header}>
@@ -61,7 +67,7 @@ const CurrentConversation = ({ conversation, messages, onSend, info }) => {
       <div className={styles.chat_contents}>
         {messages.map((message, index) => (
           <Message
-            key={index}
+            key={`${new Date().getTime()} ${index}`}
             message={message}
             isMe={info.uid === message.senderUid}
           />
@@ -73,8 +79,12 @@ const CurrentConversation = ({ conversation, messages, onSend, info }) => {
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={(e) => {
+            if (!(e.key === "Enter")) return;
+            sendMessage();
+          }}
         />
-        <button onClick={() => onSend(message)}>send</button>
+        <button onClick={sendMessage}>send</button>
       </div>
     </>
   );
@@ -90,6 +100,7 @@ export default function Chat() {
   const [recipientName, setRecipientName] = useState("");
   const [conversationId, setConversationId] = useState();
   const [conversationDict, setConversationDict] = useState({});
+  const [currentMessages, setCurrentMessages] = useState([]);
   const [conversations, setConversations] = useState([
     // {
     //   id: 1,
@@ -229,20 +240,7 @@ export default function Chat() {
   console.log("convo dict:", conversationDict);
   console.log("rUid:", recipientUid);
   console.log("rName:", recipientName);
-
-  var setDict = (message) => {
-    console.log(
-      conversationDict,
-      conversationId,
-      conversationDict[conversationId]
-    );
-    const newMessages = conversationDict[conversationId];
-    newMessages.push(message);
-    setConversationDict({
-      ...conversationDict,
-      [conversationId]: newMessages,
-    });
-  };
+  // console.log("currentMessages:", currentMessages);
 
   useEffect(() => {
     if (!info) return;
@@ -268,8 +266,17 @@ export default function Chat() {
         client.subscribe(
           "/user/" + info.uid + "/queue/messages",
           ({ body }) => {
-            console.log("incoming", body);
-            // setDict(JSON.parse(body));
+            body = JSON.parse(body);
+            setConversationDict((dict) => {
+              // console.log(body);
+              // console.log(dict);
+              // console.log(body["conversationId"]);
+              const messages = dict[body["conversationId"]];
+              console.log(messages);
+              messages.push(body);
+              dict[body["conversationId"]] = messages;
+              return { dict };
+            });
           }
         );
       },
@@ -277,16 +284,29 @@ export default function Chat() {
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
-    if (client)
-      client.subscribe("/user/" + info.uid + "/queue/messages", ({ body }) => {
-        console.log("incoming", body);
-        setDict(JSON.parse(body));
-      });
+    // if (client)
+    //   client.subscribe("/user/" + info.uid + "/queue/messages", ({ body }) => {
+    //     console.log("incoming", body);
+    //     setDict(JSON.parse(body));
+    //   });
     client.activate();
   }, [info, client]);
 
+  useEffect(() => {
+    let chat_contents = document.getElementsByClassName(styles.chat_contents);
+    if (!chat_contents || !chat_contents.length) return;
+
+    chat_contents = chat_contents[0];
+    chat_contents.scrollTo({
+      top: chat_contents.scrollHeight,
+      behavior: "smooth",
+    });
+
+    if (!conversationDict[conversationId]) return;
+    setCurrentMessages(conversationDict[conversationId]);
+  }, [conversationDict]);
+
   const sendMessage = (text) => {
-    console.log(text);
     const message = {
       senderUid: info.uid,
       recipientUid,
@@ -301,7 +321,6 @@ export default function Chat() {
     setConversationDict({ ...conversationDict, [conversationId]: newMessages });
 
     client.publish({ destination: "/app/chat", body: JSON.stringify(message) });
-    // setTexts([...text, `${info.name} - ${text}`]);
   };
 
   if (!info) return <div></div>;
@@ -366,7 +385,7 @@ export default function Chat() {
           ))}
       </div>
 
-      {conversationId && conversationDict[conversationId] && (
+      {conversationId && currentMessages && (
         <div className={styles.chat_container}>
           <CurrentConversation
             conversation={
@@ -374,7 +393,7 @@ export default function Chat() {
                 (conversation) => conversation.id === conversationId
               )[0]
             }
-            messages={conversationDict[conversationId]}
+            messages={currentMessages}
             info={info}
             onSend={sendMessage}
           />
