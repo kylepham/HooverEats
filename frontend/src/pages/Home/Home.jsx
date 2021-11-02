@@ -5,6 +5,7 @@ import Header from "../../components/Header/Header";
 import { AuthContext } from "../../contexts/AuthContext";
 import About from "../../components/About/About";
 import Contact from "../../components/Contact/Contact";
+import Footer from "../../components/Footer/Footer";
 
 
 export default function Home() {
@@ -23,6 +24,7 @@ export default function Home() {
       <Download/>
       <About/>
       <Contact/>
+      <Footer/>
     </div>
   );
 }

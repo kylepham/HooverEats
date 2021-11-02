@@ -9,12 +9,12 @@ import fimage4 from '../../images/books.svg';
 function Feature() {
   return (
     <div className='features'>
-      <h1>Features</h1>
+      <h1>Benefits</h1>
       <div className='a__container'>
-        <FeatureBox image={fimage1} title='Free swipes' content='Build up networking'/>
-        <FeatureBox image={fimage2} title='Graduation' content='Connect with upper classes'/>
-        <FeatureBox image={fimage3} title='Work' content='Refer an internship'/>
-        <FeatureBox image={fimage4} title='Study' content='Find your study buddy'/>
+        <FeatureBox image={fimage1} title='Connect' content='Build up networking'/>
+        <FeatureBox image={fimage2} title='Hack DePauw' content='Connect with upperclassmen'/>
+        <FeatureBox image={fimage3} title='Work' content="Find internship's references"/>
+        <FeatureBox image={fimage4} title='Study' content='Find study buddies'/>
       </div>
     </div>
   )

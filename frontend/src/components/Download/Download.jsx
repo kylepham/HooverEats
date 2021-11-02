@@ -1,6 +1,7 @@
 import React from "react";
 import './Download.css'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faApple, faGooglePlay } from "@fortawesome/free-brands-svg-icons"
 
 
 function Download() {
@@ -13,10 +14,10 @@ function Download() {
         <p className="details">Download Apps on your phone</p>
         <div className="dl__btns">
           <a href="#" className="dl__btn1">
-          <FontAwesomeIcon icon={['fab', 'fa-apple']} />  Download
+          <FontAwesomeIcon className='dl__icon' icon={faApple}/>  Download
           </a>
           <a href="#" className="dl__btn2">
-          <FontAwesomeIcon icon={['fab', 'fa-google-play']} />Download
+          <FontAwesomeIcon className='dl__icon' icon={faGooglePlay}/> Download
           </a>
       </div>
       </div>

@@ -33,8 +33,22 @@
   height: 150px;
 }
 .contact form input[type="submit"]{
-  height: 45px;
-  background: linear-gradient(90deg, --main-color 20%, --main-color);
-  color: var(--background-color);
-  text-transform: uppercase;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3rem;
+  background-color: var(--main-color);
+  border-radius: 5px;
+  color:var(--background-color);
+  margin: 1rem;
+  padding: 0.5rem 1rem;
+}
+.contact form input[type="submit"]:hover{
+background-color: transparent;
+  transition: all ease 0.1s;
+  color: var(--main-color);
+  border: 1px solid var(--main-color);
+  box-shadow: 5px 10px 30px rgba(198, 184, 64, 0.411);
 }
