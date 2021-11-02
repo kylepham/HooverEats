@@ -24,7 +24,7 @@ export default function NavBar({ info }) {
         <img src={logo} alt="" />
       </Link>
       <input className='menu__btn' type="checkbox" id='menu-btn'/>
-      <label className='menu__icon' for='menu__btn'>
+      <label className='menu__icon' for='menubtn'>
         <span className='nav__icon'></span>
       </label>
       <ul className='menu'>

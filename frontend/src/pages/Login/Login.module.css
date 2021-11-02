@@ -1,0 +1,24 @@
+.container{
+  margin-top: 100rem;
+  background-color: var(--darker-color);
+  width: 25rem;
+  height: 20rem;
+  margin: auto;
+  padding-top: 1.5rem;
+  margin-top: 2rem;
+  border-radius: 8px;
+}
+.btn{
+  font-size: 1rem;
+  margin-top: 5rem;
+  color: var(--dark-color);
+}
+.header{
+  color: var(--main-color);
+  font-size: 2.5rem;
+  text-align: center;
+}
+.login__icon{
+  margin-right: 0.5rem;
+  font-size: 100%;
+}

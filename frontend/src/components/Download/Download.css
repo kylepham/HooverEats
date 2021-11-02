@@ -69,7 +69,7 @@ background-color: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.3rem;
+  font-size: 1.rem;
   background-color: transparent;
   border: 1px solid var(--main-color);
   /* box-shadow: 5px 10px 30px rgba(198, 184, 64, 0.411); */

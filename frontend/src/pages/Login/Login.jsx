@@ -1,9 +1,11 @@
 import { useContext } from "react";
-// import { signIn } from "../../firebase";
+import { signIn } from "../../firebase";
 import { Redirect } from "react-router";
 import { AuthContext } from "../../contexts/AuthContext";
-import SignIn from "../../components/SignIn/SignIn"
 // import axios from "axios";
+import styles from "./Login.module.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGoogle } from "@fortawesome/free-brands-svg-icons"
 
 export default function Login() {
   const {
@@ -14,7 +16,16 @@ export default function Login() {
 
   return (
     <div>
-      <SignIn />
+      <div className={styles.container}>
+        <div className={styles.header}>Login</div>
+        <div className={styles.content}>
+          <div>
+            <button className={styles.btn} onClick={signIn}>
+              <FontAwesomeIcon className={styles.login__icon} icon={faGoogle}/>Login with Google
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
