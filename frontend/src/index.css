@@ -16,10 +16,10 @@ body{
     margin:0px;
     padding: 0px;
     background-color: var(--dark-color);
-    font-family: 'Lato', sans-serif;
 }
 *{
     box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
 }
 ul{
     list-style: none;
