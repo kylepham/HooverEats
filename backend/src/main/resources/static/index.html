@@ -1,0 +1,97 @@
+<html>
+<head>
+    <title>Chat WebSocket</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script type="text/javascript">
+        var currentUser = {}
+        var activeContact = {}
+
+        function connect() {
+            var from = document.getElementById('from').value;
+            if (from === "1") {
+                currentUser = {uid:"PMa8oDFSxmTA8UeZNYqDuULw5iz1", name:"Anh Le"}
+                activeContact = {uid:"PMa8oDFSxmTA8UeZNYqDuULw5iz2", name:"Anh T Le"}
+            } else {
+                activeContact = {uid:"PMa8oDFSxmTA8UeZNYqDuULw5iz1", name:"Anh Le"}
+                currentUser = {uid:"PMa8oDFSxmTA8UeZNYqDuULw5iz2", name:"Anh T Le"}
+            }
+
+            var socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, onConnected);
+        };
+
+        function onConnected() {
+            console.log("connected");
+
+            stompClient.subscribe(
+                "/user/" + currentUser.uid + "/queue/messages",
+                function(messageOutput) {
+                    console.log(messageOutput)
+                    showMessageOutput(JSON.parse(messageOutput.body));
+                });
+        };
+
+        function sendMessage() {
+            var text = document.getElementById('text').value;
+            if (text.trim() !== "") {
+                const message = {
+                    senderUid: currentUser.uid,
+                    recipientUid: activeContact.uid,
+                    senderName: currentUser.name,
+                    recipientName: activeContact.name,
+                    content: text,
+                    timestamp: new Date().toISOString().slice(0, 19).replace('T', ' '),
+                };
+
+                stompClient.send("/app/chat", {}, JSON.stringify(message));
+                showMessageOutput(message);
+            }
+        };
+
+        function showMessageOutput(messageOutput) {
+            var response = document.getElementById('response');
+            var p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            p.appendChild(document.createTextNode(messageOutput.senderName + ": "
+                + messageOutput.content + " (" + messageOutput.timestamp + ")"));
+            response.appendChild(p);
+        }
+
+        async function generateKeys() {
+            this.myKeyPair = await window.crypto.subtle.generateKey({
+                name: 'ECDH',
+                namedCurve: 'P-256'
+            }, true, ['deriveKey']);
+            console.log(await window.crypto.subtle.exportKey('jwk', this.myKeyPair.privateKey));
+            console.log(await window.crypto.subtle.exportKey('jwk', this.myKeyPair.publicKey));
+        }
+
+
+    </script>
+</head>
+<!--<body onload="disconnect()">-->
+<div>
+    <div>
+        <input type="text" id="from" placeholder="Choose a nickname"/>
+    </div>
+    <br />
+    <div>
+        <button id="generateKeys" onclick="generateKeys();">generate keys</button>
+        <button id="connect" onclick="connect();">Connect</button>
+        <button id="disconnect" disabled="disabled" onclick="disconnect();">
+            Disconnect
+        </button>
+    </div>
+    <br />
+    <div id="conversationDiv">
+        <input type="text" id="text" placeholder="Write a message..."/>
+        <button id="sendMessage" onclick="sendMessage();">Send</button>
+        <p id="response"></p>
+    </div>
+</div>
+
+</body>
+</html>
