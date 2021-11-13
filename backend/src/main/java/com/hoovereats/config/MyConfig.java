@@ -1,6 +1,6 @@
 package com.hoovereats.config;
 
-import com.hoovereats.authenticate.AuthenticationInterceptor;
+import com.hoovereats.authentication.AuthenticationInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
