@@ -1,5 +1,4 @@
 import { useContext, useEffect } from "react";
-import "./App.css";
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,6 +10,7 @@ import { AuthContext } from "./contexts/AuthContext";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import Login from "./pages/Login/Login";
+import Contact from "./pages/Contact/Contact";
 import Profile from "./pages/Profile/Profile";
 import NavBar from "./components/NavBar/NavBar";
 
@@ -69,6 +69,10 @@ function App() {
 
           <Route path="/about">
             <About />
+          </Route>
+
+          <Route path="/contact">
+            <Contact />
           </Route>
 
           <Redirect to="/" />

@@ -1,8 +1,8 @@
 import Download from "../../components/Download/Download";
 import Feature from "../../components/Feature/Feature";
 import Header from "../../components/Header/Header";
-import About from "../../components/About/About";
-import Contact from "../../components/Contact/Contact";
+import About from "../../components/AboutUs/AboutUs";
+import Footer from "../../components/Footer/Footer";
 
 export default function Home() {
   return (
@@ -11,7 +11,7 @@ export default function Home() {
       <Feature />
       <Download />
       <About />
-      <Contact />
+      <Footer />
     </div>
   );
 }

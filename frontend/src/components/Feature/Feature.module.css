@@ -1,0 +1,120 @@
+.features {
+  width: 100%;
+  height: 1000px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 40px;
+  background-color: var(--dark-color);
+}
+
+.features h1 {
+  color: var(--background-color);
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.features__container {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.featureBox {
+  width: 250px;
+  height: 400px;
+  margin: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: 0.1s ease-in-out;
+}
+
+.featureBox__img {
+  width: 60%;
+  height: auto;
+  margin: auto;
+}
+
+.featureBox__img img {
+  padding: 15px;
+  width: 100%;
+  height: 50%;
+  margin-top: 40px;
+}
+
+.featureBox:hover {
+  border: 1px solid var(--main-color);
+  box-shadow: 2px 2px 12px rgba(198, 184, 64, 0.411);
+}
+
+.featureBox__text {
+  width: 100%;
+  height: 40%;
+  background-color: var(--dark-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+.featureBox__text h2 {
+  color: var(--background-color);
+}
+
+.featureBox__text p {
+  margin: 0px;
+  color: #ffffffa6;
+  font-size: 1.1rem;
+  display: block;
+  display: -webkit-box;
+  max-width: 80%;
+  margin-top: 5px;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 10px;
+}
+
+.featureBox__text p:hover {
+  color: var(--background-color);
+}
+
+.featureBox__text a {
+  margin-top: 15px;
+}
+
+@media (max-width: 1300px) {
+  .features {
+    height: 1500px;
+  }
+  .features h1 {
+    font-size: 2.7rem;
+    margin: 4rem;
+  }
+  .features__container {
+    display: grid;
+    grid-template-rows: 2fr 2fr;
+    grid-template-columns: 2fr 2fr;
+    gap: 4rem;
+  }
+}
+
+@media (max-width: 650px) {
+  .features {
+    height: 2500px;
+  }
+  .features h1 {
+    font-size: 2.5rem;
+    margin: 4rem;
+  }
+  .features__container {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+}
