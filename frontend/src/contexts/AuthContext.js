@@ -1,25 +1,9 @@
-import { createContext, useReducer } from "react";
+import { createContext, useState } from "react";
 
 export const AuthContext = createContext();
 
-const authData = {
-  info: null,
-  idToken: null,
-};
-
-const AuthReducer = (state, action) => {
-  switch (action.type) {
-    case "info":
-      return { ...state, info: action.info };
-    case "idToken":
-      return { ...state, idToken: action.idToken };
-    default:
-      return state;
-  }
-};
-
 export const AuthProvider = ({ children }) => {
-  const [user, dispatch] = useReducer(AuthReducer, authData);
-  const value = { user, dispatch };
+  const [userInfo, setUserInfo] = useState(null);
+  const value = { userInfo, setUserInfo };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

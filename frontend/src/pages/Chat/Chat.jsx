@@ -106,7 +106,7 @@ const CurrentConversation = ({ conversation, messages, onSend, info }) => {
 
 export default function Chat() {
   const {
-    user: { info },
+    userInfo
   } = useContext(AuthContext);
 
   const {
@@ -156,7 +156,7 @@ export default function Chat() {
   // console.log("currentMessages:", currentMessages);
   // console.log(info, client);
   useEffect(() => {
-    if (info && client) {
+    if (userInfo && client) {
       // choose seeing the first conversation (if existed)
       (async () => {
         const allConversations = await getAllConversations();
@@ -184,7 +184,7 @@ export default function Chat() {
         }
       })();
     }
-  }, [info, client]);
+  }, [userInfo, client]);
 
   // watch changes on conversationDict
   useEffect(() => {
@@ -204,7 +204,7 @@ export default function Chat() {
   const sendMessage = (text) => {
     if (!text) return;
     const message = {
-      senderUid: info.uid,
+      senderUid: userInfo.uid,
       recipientUid,
       content: text,
       timestamp: new Date().getTime(),
@@ -225,7 +225,7 @@ export default function Chat() {
           if (conversation.id === conversationId)
             conversation = {
               ...conversation,
-              lastSenderName: info.name,
+              lastSenderName: userInfo.name,
               timestamp: new Date().getTime(),
               text,
             };
@@ -273,7 +273,7 @@ export default function Chat() {
               )[0]
             }
             messages={currentMessages}
-            info={info}
+            info={userInfo}
             onSend={sendMessage}
           />
         </div>

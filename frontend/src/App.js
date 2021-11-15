@@ -23,15 +23,12 @@ import {
 } from "./utils";
 
 function App() {
-  const { dispatch } = useContext(AuthContext);
+  const { userInfo, setUserInfo } = useContext(AuthContext);
   const { socketConnected } = useContext(SocketContext);
 
   useEffect(() => {
-    const updateAuthData = (info) => {
-      dispatch({
-        type: "info",
-        info,
-      });
+    const updateAuthData = (userInfo) => {
+      setUserInfo(userInfo);
     };
 
     auth.onAuthStateChanged(async (user) => {

@@ -8,10 +8,10 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 export default function Login() {
   const {
-    user: { info },
+    userInfo
   } = useContext(AuthContext);
 
-  if (info) return <Redirect to="/" />;
+  if (userInfo) return <Redirect to="/" />;
   return (
     <div>
       <div className={styles.container}>
