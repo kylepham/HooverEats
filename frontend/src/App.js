@@ -15,6 +15,7 @@ import Contact from "./pages/Contact/Contact";
 import Profile from "./pages/Profile/Profile";
 import NavBar from "./components/NavBar/NavBar";
 import Chat from "./pages/Chat/Chat";
+import Matching from "./pages/Matching/Matching";
 import {
   getLocalStorage,
   setLocalStorage,
@@ -51,10 +52,10 @@ function App() {
     <div className="App">
       <NavBar />
 
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
+        <Switch>
+          <Route exact path="/">
+            {socketConnected?<Matching />:<Home />}
+          </Route>
 
         <Route path="/login">
           <Login />

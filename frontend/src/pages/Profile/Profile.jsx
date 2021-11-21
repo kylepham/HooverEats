@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { signOut } from "../../firebase";
 import { AuthContext } from "../../contexts/AuthContext";
+import { SocketContext } from "../../contexts/SocketContext";
 import { Redirect } from "react-router";
 import styles from "./Profile.module.css";
 import PrioritySlider from "./PrioritySlider";
@@ -10,6 +11,7 @@ export default function Profile() {
   const {
     userInfo, setUserInfo
   } = useContext(AuthContext);
+  const {socketConnected} = useContext(SocketContext)
 
   const years = ["Freshman", "Sophomore", "Junior", "Senior", "Faculty"];
   const today = new Date();
@@ -178,12 +180,13 @@ export default function Profile() {
       setUserInfo({ ...userInfo, hobby: userHobbies });
     }
   };
-  if (!userInfo) return <Redirect to="/" />;
+
+  if (!socketConnected) return <Redirect to="/" />;
   return (
     <div>
       <div className={styles.profile}>
         <div className={styles.profile__avatar}>
-          <img src={userInfo.photoUrl} alt="" />
+          <img src={userInfo?.photoUrl} alt="" />
           <p className={styles.profile__badge}>
             {userInfo?.gradYear!==-1 ? "STUDENT" : "FACULTY"}
           </p>

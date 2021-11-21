@@ -1,0 +1,10 @@
+.test {
+  margin: 5px 15px;
+}
+
+.textBox {
+  background-color: darkgray;
+  border-radius: 20px;
+  height: 30px;
+  padding: 10px;
+}

@@ -17,7 +17,7 @@ export const SocketProvider = ({ children }) => {
   const [conversationId, setConversationId] = useState(null);
   const [conversationDict, setConversationDict] = useState({});
   const [currentMessages, setCurrentMessages] = useState(null);
-  const [conversations, setConversations] = useState(null);
+  const [conversations, setConversations] = useState([]);
   const [hasNewMessageInBackground, setHasNewMessageInBackground] =
     useState(false);
   const value = {
