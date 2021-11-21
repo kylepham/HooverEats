@@ -38,6 +38,11 @@ nav ul {
   transition: all ease 0.2s;
 }
 
+.current_path {
+  color: var(--main-color);
+  border-bottom: 3px solid rgba(198, 184, 64);
+}
+
 nav ul li a {
   height: 40px;
   line-height: 43px;
