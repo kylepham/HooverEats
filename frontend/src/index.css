@@ -9,6 +9,7 @@
   --dark-color: #161512;
   --darker-color: #131111;
   --background-color: #fffbf5;
+  --navbar-height: 100px;
 }
 
 body {
@@ -30,10 +31,10 @@ a {
   text-decoration: none;
 }
 
-button {
+/* button {
   outline: none;
   border: none;
-}
+} */
 
 input {
   outline: none;

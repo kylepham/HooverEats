@@ -23,7 +23,7 @@ const signOut = async () => {
   await auth.signOut();
 };
 const getIdToken = async () => {
-  const idToken = await auth.currentUser.getIdToken(true);
+  const idToken = await auth.currentUser.getIdToken();
   return idToken;
 };
 

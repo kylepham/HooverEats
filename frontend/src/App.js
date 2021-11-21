@@ -13,6 +13,8 @@ import Login from "./pages/Login/Login";
 import Contact from "./pages/Contact/Contact";
 import Profile from "./pages/Profile/Profile";
 import NavBar from "./components/NavBar/NavBar";
+import Chat from "./pages/Chat/Chat";
+import { postAuthInfo } from "./utils";
 
 function App() {
   const {
@@ -20,31 +22,28 @@ function App() {
     dispatch,
   } = useContext(AuthContext);
 
+  const updateAuthData = (info) => {
+    dispatch({
+      type: "info",
+      info,
+    });
+  };
+
   useEffect(() => {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
-        dispatch({
-          type: "info",
-          info: {
-            name: user.displayName,
-            email: user.email,
-            photo: user.photoURL,
-            uid: user.uid,
-          },
+        const token = await getIdToken();
+        console.log(token);
+        updateAuthData({
+          name: user.displayName,
+          email: user.email,
+          photo: user.photoURL,
+          uid: user.uid,
         });
-        dispatch({
-          type: "idToken",
-          idToken: await getIdToken(),
-        });
+
+        await postAuthInfo();
       } else {
-        dispatch({
-          type: "info",
-          info: null,
-        });
-        dispatch({
-          type: "idToken",
-          idToken: null,
-        });
+        updateAuthData(null);
       }
     });
   }, []);
@@ -63,7 +62,11 @@ function App() {
             <Login />
           </Route>
 
-          <Route path="/me">
+          <Route exact path="/chat">
+            <Chat />
+          </Route>
+
+          <Route exact path="/me">
             <Profile me={true} />
           </Route>
 

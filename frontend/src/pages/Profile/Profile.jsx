@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { signOut } from "../../firebase";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect } from "react-router";
-import axios from "axios";
 import styles from "./Profile.module.css";
+import { getProfile } from "../../utils";
 
 export default function Profile() {
   const {
@@ -12,20 +12,9 @@ export default function Profile() {
 
   const [userInfo, setUserInfo] = useState(null);
 
-  console.log(idToken);
-  console.log(userInfo);
-
   useEffect(() => {
     const test = async () => {
-      setUserInfo(
-        (
-          await axios.get("https://twiki.csc.depauw.edu:5000/profile", {
-            headers: {
-              authorization: idToken,
-            },
-          })
-        ).data
-      );
+      setUserInfo(await getProfile());
     };
 
     test();
