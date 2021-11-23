@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { setLocalStorage } from "./utils";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAFlWj4ulrA8toLvVwwkrc38X58R8Yt-uA",
@@ -20,6 +21,7 @@ const signIn = async () => {
   await signInWithPopup(auth, googleProvider);
 };
 const signOut = async () => {
+  setLocalStorage("uid", "");
   await auth.signOut();
 };
 const getIdToken = async () => {

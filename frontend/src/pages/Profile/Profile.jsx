@@ -1,14 +1,16 @@
 import { useContext, useEffect, useState } from "react";
 import { signOut } from "../../firebase";
 import { AuthContext } from "../../contexts/AuthContext";
+import { SocketContext } from "../../contexts/SocketContext";
 import { Redirect } from "react-router";
 import styles from "./Profile.module.css";
 import { getProfile } from "../../utils";
 
 export default function Profile() {
   const {
-    user: { info, idToken },
+    user: { info },
   } = useContext(AuthContext);
+  const { socketConnected } = useContext(SocketContext);
 
   const [userInfo, setUserInfo] = useState(null);
 
@@ -24,7 +26,8 @@ export default function Profile() {
     if (e.target.checked) setUserInfo({ ...userInfo, type: e.target.value });
   };
 
-  if (!info) return <Redirect to="/" />;
+  if (!socketConnected) return <Redirect to="/" />;
+
   return (
     <div>
       <div className={styles.profile}>

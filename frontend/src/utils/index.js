@@ -48,12 +48,30 @@ export const getAllMessagesByConversationId = async (id) => {
 export const getProfile = async () => {
   try {
     return (
-      await axios.get("https://twiki.csc.depauw.edu:5000/profile", {
+      await axios.get("https://twiki.csc.depauw.edu/api/profile", {
         headers: {
           authorization: await getIdToken(),
         },
       })
     ).data;
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
+export const setLocalStorage = (key, value) => {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.warn(e);
+  }
+};
+
+export const getLocalStorage = (key) => {
+  try {
+    const value = JSON.parse(window.localStorage.getItem(key));
+
+    return value;
   } catch (e) {
     console.warn(e);
   }

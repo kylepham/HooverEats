@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styles from "./NavBar.module.css";
 import logo from "../../images/logo.png";
 import { Link, useLocation } from "react-router-dom";
+import { SocketContext } from "../../contexts/SocketContext";
 
-export default function NavBar({ info }) {
+export default function NavBar() {
+  const { socketConnected } = useContext(SocketContext);
   const [nav, setNav] = useState(false);
   const { pathname } = useLocation(); // get the current pathname, like /chat
   const path = pathname.slice(1);
@@ -44,7 +46,7 @@ export default function NavBar({ info }) {
             Contact
           </Link>
         </li>
-        {!info && (
+        {!socketConnected && (
           <li>
             <Link
               className={`${path === "login" ? styles.current_path : ""}`}
@@ -54,7 +56,7 @@ export default function NavBar({ info }) {
             </Link>
           </li>
         )}
-        {info && (
+        {socketConnected && (
           <li>
             <Link
               className={`${path === "me" ? styles.current_path : ""}`}
@@ -64,7 +66,7 @@ export default function NavBar({ info }) {
             </Link>
           </li>
         )}
-        {info && (
+        {socketConnected && (
           <li>
             <Link
               className={`${path === "chat" ? styles.current_path : ""}`}

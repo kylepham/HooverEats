@@ -5,8 +5,9 @@ import {
   Route,
   Redirect,
 } from "react-router-dom";
-import { auth, getIdToken } from "./firebase";
+import { auth } from "./firebase";
 import { AuthContext } from "./contexts/AuthContext";
+import { SocketContext } from "./contexts/SocketContext";
 import Home from "./pages/Home/Home";
 import About from "./pages/About/About";
 import Login from "./pages/Login/Login";
@@ -14,44 +15,45 @@ import Contact from "./pages/Contact/Contact";
 import Profile from "./pages/Profile/Profile";
 import NavBar from "./components/NavBar/NavBar";
 import Chat from "./pages/Chat/Chat";
-import { postAuthInfo } from "./utils";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  postAuthInfo,
+  getProfile,
+} from "./utils";
 
 function App() {
-  const {
-    user: { info },
-    dispatch,
-  } = useContext(AuthContext);
-
-  const updateAuthData = (info) => {
-    dispatch({
-      type: "info",
-      info,
-    });
-  };
+  const { dispatch } = useContext(AuthContext);
+  const { socketConnected } = useContext(SocketContext);
 
   useEffect(() => {
+    const updateAuthData = (info) => {
+      dispatch({
+        type: "info",
+        info,
+      });
+    };
+
     auth.onAuthStateChanged(async (user) => {
       if (user) {
-        const token = await getIdToken();
-        console.log(token);
-        updateAuthData({
-          name: user.displayName,
-          email: user.email,
-          photo: user.photoURL,
-          uid: user.uid,
+        if (getLocalStorage("uid") !== user.uid)
+          setLocalStorage("uid", user.uid);
+        await postAuthInfo().then(async () => {
+          updateAuthData(await getProfile());
         });
-
-        await postAuthInfo();
       } else {
+        if (getLocalStorage("uid") !== "") setLocalStorage("uid", "");
         updateAuthData(null);
       }
     });
   }, []);
 
+  if (!socketConnected) return <div style={{ color: "white" }}>Nosocket</div>;
+
   return (
     <div className="App">
       <Router>
-        <NavBar info={info} />
+        <NavBar />
 
         <Switch>
           <Route exact path="/">
@@ -67,7 +69,7 @@ function App() {
           </Route>
 
           <Route exact path="/me">
-            <Profile me={true} />
+            <Profile />
           </Route>
 
           <Route path="/about">
