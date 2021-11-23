@@ -1,13 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-import { Client } from "@stomp/stompjs";
+import { SocketContext } from "../../contexts/SocketContext";
 import styles from "./Chat.module.css";
 import {
   getAllConversations,
   getAllMessagesByConversationId,
 } from "../../utils";
-
-let client;
 
 const Conversation = ({ conversation, chosenId, ...rest }) => {
   return (
@@ -64,7 +62,6 @@ const Message = ({ message, isMe }) => {
 };
 
 const CurrentConversation = ({ conversation, messages, onSend, info }) => {
-  // console.log("currentMessages:", messages);
   const [message, setMessage] = useState("");
 
   const sendMessage = () => {
@@ -112,13 +109,22 @@ export default function Chat() {
     user: { info },
   } = useContext(AuthContext);
 
+  const {
+    client,
+    socketConnected,
+    recipientUid,
+    setRecipientUid,
+    conversationId,
+    setConversationId,
+    conversationDict,
+    setConversationDict,
+    currentMessages,
+    setCurrentMessages,
+    conversations,
+    setConversations,
+  } = useContext(SocketContext);
+
   const [text, setText] = useState("");
-  const [recipientUid, setRecipientUid] = useState(null);
-  const [recipientName, setRecipientName] = useState(null);
-  const [conversationId, setConversationId] = useState(null);
-  const [conversationDict, setConversationDict] = useState({});
-  const [currentMessages, setCurrentMessages] = useState(null);
-  const [conversations, setConversations] = useState(null);
 
   const onConversationClick = async (conversationId) => {
     if (!conversationId) return;
@@ -140,11 +146,6 @@ export default function Chat() {
           (conversation) => conversation.id === conversationId
         )[0]?.recipientUid
       );
-      setRecipientName(
-        conversations.filter(
-          (conversation) => conversation.id === conversationId
-        )[0]?.recipientName
-      );
     }
   };
 
@@ -153,95 +154,36 @@ export default function Chat() {
   // console.log("rUid:", recipientUid);
   // console.log("rName:", recipientName);
   // console.log("currentMessages:", currentMessages);
-
+  // console.log(info, client);
   useEffect(() => {
-    if (!info) return;
-    if (client) return;
-
-    // choose seeing the first conversation (if existed)
-    (async () => {
-      const allConversations = await getAllConversations();
-      if (!allConversations) return;
-      setConversations(
-        allConversations.sort(
-          (prev, next) => new Date(next.timestamp) - new Date(prev.timestamp)
-        )
-      );
-
-      const conversationId = allConversations[0]?.id;
-      setConversationId(conversationId);
-      if (conversationId) {
-        const messages = await getAllMessagesByConversationId(conversationId);
-        setConversationDict({ [conversationId]: messages });
-
-        // modify recipientUid & recipientName
-        if (allConversations.length) {
-          setRecipientUid(
-            allConversations.filter(
-              (conversation) => conversation.id === conversationId
-            )[0]?.recipientUid
-          );
-          setRecipientName(
-            allConversations.filter(
-              (conversation) => conversation.id === conversationId
-            )[0]?.recipientName
-          );
-        }
-      }
-    })();
-
-    client = new Client({
-      brokerURL: "wss://twiki.csc.depauw.edu/ws",
-      connectHeaders: {},
-      debug: (msg) => {
-        console.log(msg);
-      },
-      onConnect: function () {
-        client.subscribe(
-          "/user/" + info.uid + "/queue/messages",
-          ({ body }) => {
-            // console.log("add msg onconnected");
-            body = JSON.parse(body);
-            setConversationId((conversationId) => {
-              setConversationDict((dict) => {
-                if (dict[body["conversationId"]]) {
-                  const messages = [...dict[body["conversationId"]]];
-                  if (
-                    messages.filter((message) => message.id === body.id)
-                      .length === 0
-                  ) {
-                    // console.log(messages);
-                    messages.push(body);
-                    dict[body["conversationId"]] = messages;
-                  }
-                }
-                return { ...dict };
-              });
-
-              setConversations((conversations) => {
-                const conversation = conversations.filter(
-                  (conversation) => conversation.id === body["conversationId"]
-                )[0];
-                conversation.timestamp = body["timestamp"];
-                conversation.text = body["content"];
-                conversation.lastSenderName = body["senderName"];
-                return [
-                  ...conversations.sort(
-                    (prev, next) =>
-                      new Date(next.timestamp) - new Date(prev.timestamp)
-                  ),
-                ];
-              });
-              return conversationId;
-            });
-          }
+    if (info && client) {
+      // choose seeing the first conversation (if existed)
+      (async () => {
+        const allConversations = await getAllConversations();
+        if (!allConversations) return;
+        setConversations(
+          allConversations.sort(
+            (prev, next) => new Date(next.timestamp) - new Date(prev.timestamp)
+          )
         );
-      },
-      reconnectDelay: 10000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-    });
-    client.activate();
+
+        const conversationId = allConversations[0]?.id;
+        setConversationId(conversationId);
+        if (conversationId) {
+          const messages = await getAllMessagesByConversationId(conversationId);
+          setConversationDict({ [conversationId]: messages });
+
+          // modify recipientUid & recipientName
+          if (allConversations.length) {
+            setRecipientUid(
+              allConversations.filter(
+                (conversation) => conversation.id === conversationId
+              )[0]?.recipientUid
+            );
+          }
+        }
+      })();
+    }
   }, [info, client]);
 
   // watch changes on conversationDict
@@ -260,21 +202,23 @@ export default function Chat() {
   }, [conversationDict, conversationId, currentMessages]);
 
   const sendMessage = (text) => {
+    if (!text) return;
     const message = {
       senderUid: info.uid,
       recipientUid,
-      senderName: info.name,
-      recipientName: recipientName,
       content: text,
       timestamp: new Date().getTime(),
     };
 
     const newMessages = conversationDict[conversationId];
-    newMessages.push(message);
-    setConversationDict({
-      ...conversationDict,
-      [conversationId]: newMessages,
-    });
+    if (newMessages) {
+      newMessages.push(message);
+      setConversationDict({
+        ...conversationDict,
+        [conversationId]: newMessages,
+      });
+    }
+
     setConversations(
       conversations
         .map((conversation) => {
@@ -298,7 +242,7 @@ export default function Chat() {
     });
   };
 
-  if (!info) return <div></div>;
+  if (!socketConnected) return <div></div>;
 
   return (
     <div className={styles.container}>
