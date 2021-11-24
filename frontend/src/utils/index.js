@@ -59,6 +59,18 @@ export const getProfile = async () => {
   }
 };
 
+export const postUserInfo = async (userInfo) => {
+  await axios.post(
+    "https://twiki.csc.depauw.edu/api/profile/update",
+    userInfo,
+    {
+      headers: {
+        authorization: await getIdToken(),
+      },
+    }
+  );
+};
+
 export const setLocalStorage = (key, value) => {
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
