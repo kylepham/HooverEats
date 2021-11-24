@@ -1,14 +1,15 @@
 package com.hoovereats.messaging;
 
-
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
+import com.hoovereats.messaging.models.ClientMessage;
 import com.hoovereats.messaging.models.Conversation;
 import com.hoovereats.messaging.models.ConversationRepository;
 import com.hoovereats.messaging.models.Message;
 import com.hoovereats.messaging.models.MessageRepository;
 import com.hoovereats.messaging.responses.ConversationResponse;
+import com.hoovereats.profile.User;
+import com.hoovereats.profile.UserRepository;
 import com.hoovereats.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -28,24 +29,27 @@ import java.util.List;
 public class MessagingController {
 	@Autowired private ConversationRepository conversationRepository;
 	@Autowired private MessageRepository messageRepository;
+	@Autowired private UserRepository userRepository;
 	@Autowired private SimpMessagingTemplate messagingTemplate;
 
 	@MessageMapping("/chat")
-	public void processMessage(@Payload Message message) throws FirebaseAuthException {
-		Conversation conversation = conversationRepository.findConversationId(message.getSenderUid(), message.getRecipientUid());
+	public void processMessage(@Payload ClientMessage clientMessage) throws FirebaseAuthException {
+		Conversation conversation = conversationRepository.findConversationId(clientMessage.getSenderUid(), clientMessage.getRecipientUid());
+		User sender = userRepository.findUserByUId(clientMessage.getSenderUid());
+		User recipient = userRepository.findUserByUId(clientMessage.getRecipientUid());
 		if (conversation == null) {
-			String senderPhotoUrl = FirebaseAuth.getInstance().getUser(message.getSenderUid()).getPhotoUrl();
-			String recipientPhotoUrl = FirebaseAuth.getInstance().getUser(message.getRecipientUid()).getPhotoUrl();
-			conversation = new Conversation(message.getSenderUid(), message.getSenderName(), senderPhotoUrl,
-											message.getRecipientUid(), message.getRecipientName(), recipientPhotoUrl);
+			conversation = new Conversation(clientMessage.getSenderUid(), sender.getName(), sender.getPhotoUrl(),
+					clientMessage.getRecipientUid(), recipient.getName(), recipient.getPhotoUrl());
 			Conversation savedConversation = conversationRepository.save(conversation);
 		}
 		Integer conversationId = conversation.getId();
-		message.setConversationId(conversationId);
+		Message receivedMessage = new Message(clientMessage.getSenderUid(), sender.getName(), sender.getPhotoUrl(),
+											clientMessage.getRecipientUid(), recipient.getName(), recipient.getPhotoUrl(),
+											clientMessage.getContent(), clientMessage.getTimestamp(), conversationId);
 
-		Message sentMessage = messageRepository.save(message);
+		Message sentMessage = messageRepository.save(receivedMessage);
 
-		messagingTemplate.convertAndSendToUser(message.getRecipientUid(),"/queue/messages", sentMessage);
+		messagingTemplate.convertAndSendToUser(receivedMessage.getRecipientUid(),"/queue/messages", sentMessage);
 
 	}
 
@@ -54,22 +58,18 @@ public class MessagingController {
 		List<Conversation> conversationList = conversationRepository.findTop10ByUserId(userRecord.getUid());
 		List<ConversationResponse> conversationsResponse = new ArrayList<>();
 		for (Conversation conversation : conversationList) {
-			try {
-				ConversationResponse conversationResponse;
-				Message lastMessage = messageRepository.findLastMessageByConversationId(conversation.getId());
-				if (conversation.getSenderUid().equals(userRecord.getUid())) {
-					conversationResponse = new ConversationResponse(conversation.getId(),
-							conversation.getRecipientName(), conversation.getRecipientUid(), conversation.getRecipientPhotoUrl(),
-							lastMessage.getSenderName(), lastMessage.getContent(), lastMessage.getTimestamp());
-				} else {
-					conversationResponse = new ConversationResponse(conversation.getId(),
-							conversation.getSenderName(), conversation.getSenderUid(), conversation.getSenderPhotoUrl(),
-							lastMessage.getSenderName(), lastMessage.getContent(), lastMessage.getTimestamp());
-				}
-				conversationsResponse.add(conversationResponse);
-			} catch (Exception e) {
-//				ignore for now
+			ConversationResponse conversationResponse;
+			Message lastMessage = messageRepository.findLastMessageByConversationId(conversation.getId());
+			if (conversation.getSenderUid().equals(userRecord.getUid())) {
+				conversationResponse = new ConversationResponse(conversation.getId(),
+						conversation.getRecipientName(), conversation.getRecipientUid(), conversation.getRecipientPhotoUrl(),
+						lastMessage.getSenderName(), lastMessage.getContent(), lastMessage.getTimestamp());
+			} else {
+				conversationResponse = new ConversationResponse(conversation.getId(),
+						conversation.getSenderName(), conversation.getSenderUid(), conversation.getSenderPhotoUrl(),
+						lastMessage.getSenderName(), lastMessage.getContent(), lastMessage.getTimestamp());
 			}
+			conversationsResponse.add(conversationResponse);
 		}
 		return JsonUtils.toJsonString(conversationsResponse);
 	}

@@ -16,21 +16,28 @@ public class Message {
 	private String senderUid;
 	@Column(name = "sender_name")
 	private String senderName;
+	@Column(name = "sender_photo_url")
+	private String senderPhotoUrl;
 	@Column(name = "recipient_uid")
 	private String recipientUid;
 	@Column(name = "recipient_name")
 	private String recipientName;
+	@Column(name = "recipient_photo_url")
+	private String recipientPhotoUrl;
 	private String content;
-	private String timestamp;
+	private Long timestamp;
 	@Column(name = "conversation_id")
 	private Integer conversationId;
 
-	public Message(Integer id, String senderUid, String senderName, String recipientUid, String recipientName, String content, String timestamp, Integer conversationId) {
-		this.id = id;
+	public Message(String senderUid, String senderName, String senderPhotoUrl,
+				   String recipientUid, String recipientName, String recipientPhotoUrl,
+				   String content, Long timestamp, Integer conversationId) {
 		this.senderUid = senderUid;
 		this.senderName = senderName;
+		this.senderPhotoUrl = senderPhotoUrl;
 		this.recipientUid = recipientUid;
 		this.recipientName = recipientName;
+		this.recipientPhotoUrl = recipientPhotoUrl;
 		this.content = content;
 		this.timestamp = timestamp;
 		this.conversationId = conversationId;
@@ -64,6 +71,14 @@ public class Message {
 		this.senderName = senderName;
 	}
 
+	public String getSenderPhotoUrl() {
+		return senderPhotoUrl;
+	}
+
+	public void setSenderPhotoUrl(String senderPhotoUrl) {
+		this.senderPhotoUrl = senderPhotoUrl;
+	}
+
 	public String getRecipientUid() {
 		return recipientUid;
 	}
@@ -80,6 +95,14 @@ public class Message {
 		this.recipientName = recipientName;
 	}
 
+	public String getRecipientPhotoUrl() {
+		return recipientPhotoUrl;
+	}
+
+	public void setRecipientPhotoUrl(String recipientPhotoUrl) {
+		this.recipientPhotoUrl = recipientPhotoUrl;
+	}
+
 	public String getContent() {
 		return content;
 	}
@@ -88,11 +111,11 @@ public class Message {
 		this.content = content;
 	}
 
-	public String getTimestamp() {
+	public Long getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(String timestamp) {
+	public void setTimestamp(Long timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -110,10 +133,12 @@ public class Message {
 				"id=" + id +
 				", senderUid='" + senderUid + '\'' +
 				", senderName='" + senderName + '\'' +
+				", senderPhotoUrl='" + senderPhotoUrl + '\'' +
 				", recipientUid='" + recipientUid + '\'' +
 				", recipientName='" + recipientName + '\'' +
+				", recipientPhotoUrl='" + recipientPhotoUrl + '\'' +
 				", content='" + content + '\'' +
-				", timestamp='" + timestamp + '\'' +
+				", timestamp=" + timestamp +
 				", conversationId=" + conversationId +
 				'}';
 	}
