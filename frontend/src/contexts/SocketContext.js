@@ -52,32 +52,44 @@ export const SocketProvider = ({ children }) => {
               body = JSON.parse(body);
               setConversationId((conversationId) => {
                 setConversationDict((dict) => {
-                  if (dict[body["conversationId"]]) {
-                    const messages = [...dict[body["conversationId"]]];
-                    if (
-                      messages.filter((message) => message.id === body.id)
-                        .length === 0
-                    ) {
-                      messages.push(body);
-                      dict[body["conversationId"]] = messages;
-                    }
+                  if (!dict[body["conversationId"]]) {
+                    dict[body["conversationId"]] = []
                   }
-                  return { ...dict };
+                  const messages = [...dict[body["conversationId"]]];
+                  if (
+                    messages.filter((message) => message.id === body.id)
+                      .length === 0
+                  ) {
+                    messages.push(body);
+                    dict[body["conversationId"]] = messages;
+                  }
+                return { ...dict };
                 });
 
                 setConversations((conversations) => {
                   let conversation = conversations.filter(
-                    (conversation) => conversation.id === body["conversationId"]
+                    (conversation) => conversation.conversationId === body["conversationId"]
                   )[0];
                   if (!conversation) {
-                    conversation = {
-                      id: body["conversationId"],
-                      senderUid: body["recipientUid"],
-                      senderPhotoUrl: body["recipientPhotoUrl"],
-                      recipientUid: body["senderUid"],
-                      recipientPhotoUrl: body["senderPhotoUrl"],
-                      recipientName: body["senderName"],
-                    };
+                    if (body["senderUid"] === getLocalStorage("uid")) {
+                      conversation = {
+                        conversationId: body["conversationId"],
+                        senderUid: body["senderUid"],
+                        senderPhotoUrl: body["senderPhotoUrl"],
+                        recipientUid: body["recipientUid"],
+                        recipientPhotoUrl: body["recipientPhotoUrl"],
+                        recipientName: body["recipientName"],
+                      };
+                    } else {
+                      conversation = {
+                        conversationId: body["conversationId"],
+                        senderUid: body["recipientUid"],
+                        senderPhotoUrl: body["recipientPhotoUrl"],
+                        recipientUid: body["senderUid"],
+                        recipientPhotoUrl: body["senderPhotoUrl"],
+                        recipientName: body["senderName"],
+                      };
+                    }
                     conversations.push(conversation);
                   }
                   conversation.timestamp = body["timestamp"];
