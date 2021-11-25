@@ -22,6 +22,7 @@ nav.active {
 
 nav ul {
   display: flex;
+  position: relative;
 }
 
 .active {
@@ -41,6 +42,18 @@ nav ul {
 .current_path {
   color: var(--main-color);
   border-bottom: 3px solid rgba(198, 184, 64);
+}
+
+.chat_notification {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 20px;
+  background-color: red;
+  box-shadow: 0 0 7px rgb(228, 63, 63), 0 0 10px rgb(228, 111, 111),
+    0 0 21px rgb(168, 59, 59);
 }
 
 nav ul li a {

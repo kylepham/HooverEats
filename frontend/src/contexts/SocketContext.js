@@ -1,11 +1,14 @@
 import { createContext, useEffect, useState } from "react";
-import { getLocalStorage } from "../utils";
 import { Client } from "@stomp/stompjs";
+import { useLocation } from "react-router-dom";
+import { getLocalStorage } from "../utils";
 
 export const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
   let clientHelper;
+  const location = useLocation();
+  const [_, setCurrentPathname] = useState("/");
   const [client, setClient] = useState(null);
   const [socketConnected, setSocketConnected] = useState(false);
   const [uid, setUid] = useState(null);
@@ -15,6 +18,8 @@ export const SocketProvider = ({ children }) => {
   const [conversationDict, setConversationDict] = useState({});
   const [currentMessages, setCurrentMessages] = useState(null);
   const [conversations, setConversations] = useState(null);
+  const [hasNewMessageInBackground, setHasNewMessageInBackground] =
+    useState(false);
   const value = {
     client,
     socketConnected,
@@ -30,6 +35,8 @@ export const SocketProvider = ({ children }) => {
     setCurrentMessages,
     conversations,
     setConversations,
+    hasNewMessageInBackground,
+    setHasNewMessageInBackground,
   };
 
   window.addEventListener("storage", (e) => {
@@ -49,11 +56,18 @@ export const SocketProvider = ({ children }) => {
           clientHelper.subscribe(
             "/user/" + getLocalStorage("uid") + "/queue/messages",
             ({ body }) => {
+              setCurrentPathname((currentPathname) => {
+                // if user is in another tab, and a new message comes
+                if (currentPathname !== "chat")
+                  setHasNewMessageInBackground(true);
+
+                return currentPathname;
+              });
               body = JSON.parse(body);
               setConversationId((conversationId) => {
                 setConversationDict((dict) => {
                   if (!dict[body["conversationId"]]) {
-                    dict[body["conversationId"]] = []
+                    dict[body["conversationId"]] = [];
                   }
                   const messages = [...dict[body["conversationId"]]];
                   if (
@@ -63,12 +77,13 @@ export const SocketProvider = ({ children }) => {
                     messages.push(body);
                     dict[body["conversationId"]] = messages;
                   }
-                return { ...dict };
+                  return { ...dict };
                 });
 
                 setConversations((conversations) => {
                   let conversation = conversations.filter(
-                    (conversation) => conversation.conversationId === body["conversationId"]
+                    (conversation) =>
+                      conversation.conversationId === body["conversationId"]
                   )[0];
                   if (!conversation) {
                     if (body["senderUid"] === getLocalStorage("uid")) {
@@ -120,6 +135,10 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (client) client.activate();
   }, [client]);
+
+  useEffect(() => {
+    setCurrentPathname(location.pathname.slice(1));
+  }, [location]);
 
   return (
     <SocketContext.Provider value={value}>{children}</SocketContext.Provider>
