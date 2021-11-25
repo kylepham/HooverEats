@@ -12,7 +12,8 @@ const Conversation = ({ conversation, chosenId, ...rest }) => {
     <div
       className={`${styles.conversation} ${
         chosenId === conversation.conversationId
-          ? styles.conversation_active : ""
+          ? styles.conversation_active
+          : ""
       }`}
       {...rest}
     >
@@ -156,6 +157,8 @@ export default function Chat() {
   // console.log(info, client);
   useEffect(() => {
     if (userInfo && client) {
+      if (conversations && conversationId && recipientUid) return;
+
       // choose seeing the first conversation (if existed)
       (async () => {
         const allConversations = await getAllConversations();
@@ -206,6 +209,7 @@ export default function Chat() {
         );
     }
   }, [conversations, conversationDict, conversationId, currentMessages]);
+
   const sendMessage = (text) => {
     if (!text) return;
     const message = {
@@ -214,23 +218,6 @@ export default function Chat() {
       content: text,
       timestamp: new Date().getTime(),
     };
-
-    setConversations(
-      conversations
-        .map((conversation) => {
-          if (conversation.conversationId === conversationId)
-            conversation = {
-              ...conversation,
-              lastSenderName: userInfo.name,
-              timestamp: new Date().getTime(),
-              text,
-            };
-          return conversation;
-        })
-        .sort(
-          (prev, next) => new Date(next.timestamp) - new Date(prev.timestamp)
-        )
-    );
 
     client.publish({
       destination: "/app/chat",
@@ -276,21 +263,21 @@ export default function Chat() {
       )}
 
       {/* Initiate conversation with specified recipientUid && text */}
-      {/*<input*/}
-      {/*  type="text"*/}
-      {/*  placeholder="to..."*/}
-      {/*  value={recipientUid}*/}
-      {/*  onChange={(e) => setRecipientUid(e.target.value)}*/}
-      {/*/>*/}
-      {/*<br />*/}
-      {/*<input*/}
-      {/*  type="text"*/}
-      {/*  placeholder="message..."*/}
-      {/*  value={text}*/}
-      {/*  onChange={(e) => setText(e.target.value)}*/}
-      {/*/>*/}
-      {/*<br />*/}
-      {/*<button onClick={() => sendMessage(text)}>send</button>*/}
+      {/* <input
+        type="text"
+        placeholder="to..."
+        value={recipientUid}
+        onChange={(e) => setRecipientUid(e.target.value)}
+      />
+      <br />
+      <input
+        type="text"
+        placeholder="message..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <br />
+      <button onClick={() => sendMessage(text)}>send</button> */}
     </div>
   );
 }

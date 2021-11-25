@@ -49,37 +49,35 @@ function App() {
 
   return (
     <div className="App">
-      <Router>
-        <NavBar />
+      <NavBar />
 
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
+      <Switch>
+        <Route exact path="/">
+          <Home />
+        </Route>
 
-          <Route path="/login">
-            <Login />
-          </Route>
+        <Route path="/login">
+          <Login />
+        </Route>
 
-          <Route exact path="/chat">
-            <Chat />
-          </Route>
+        <Route exact path="/chat">
+          <Chat />
+        </Route>
 
-          <Route exact path="/me">
-            <Profile />
-          </Route>
+        <Route exact path="/me">
+          <Profile />
+        </Route>
 
-          <Route path="/about">
-            <About />
-          </Route>
+        <Route exact path="/about">
+          <About />
+        </Route>
 
-          <Route path="/contact">
-            <Contact />
-          </Route>
+        <Route exact path="/contact">
+          <Contact />
+        </Route>
 
-          <Redirect to="/" />
-        </Switch>
-      </Router>
+        <Redirect to="/" />
+      </Switch>
     </div>
   );
 }

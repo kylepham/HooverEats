@@ -5,7 +5,11 @@ import { Link, useLocation } from "react-router-dom";
 import { SocketContext } from "../../contexts/SocketContext";
 
 export default function NavBar() {
-  const { socketConnected } = useContext(SocketContext);
+  const {
+    socketConnected,
+    hasNewMessageInBackground,
+    setHasNewMessageInBackground,
+  } = useContext(SocketContext);
   const [nav, setNav] = useState(false);
   const { pathname } = useLocation(); // get the current pathname, like /chat
   const path = pathname.slice(1);
@@ -71,9 +75,14 @@ export default function NavBar() {
             <Link
               className={`${path === "chat" ? styles.current_path : ""}`}
               to="/chat"
-              duration="1000"
+              onClick={() => {
+                setHasNewMessageInBackground(false);
+              }}
             >
               Chat
+              {hasNewMessageInBackground && (
+                <div className={`${styles.chat_notification}`} />
+              )}
             </Link>
           </li>
         )}
