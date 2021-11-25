@@ -11,7 +11,8 @@ const Conversation = ({ conversation, chosenId, ...rest }) => {
   return (
     <div
       className={`${styles.conversation} ${
-        chosenId === conversation.id ? styles.conversation_active : ""
+        chosenId === conversation.conversationId
+          ? styles.conversation_active : ""
       }`}
       {...rest}
     >
@@ -105,9 +106,7 @@ const CurrentConversation = ({ conversation, messages, onSend, info }) => {
 };
 
 export default function Chat() {
-  const {
-    userInfo
-  } = useContext(AuthContext);
+  const { userInfo } = useContext(AuthContext);
 
   const {
     client,
@@ -143,13 +142,13 @@ export default function Chat() {
     if (conversations.length) {
       setRecipientUid(
         conversations.filter(
-          (conversation) => conversation.id === conversationId
+          (conversation) => conversation.conversationId === conversationId
         )[0]?.recipientUid
       );
     }
   };
-
-  // console.log("conversations", conversations);
+  // console.log("convoid:", conversationId);
+  // console.log("conversations:", conversations);
   // console.log("convo dict:", conversationDict);
   // console.log("rUid:", recipientUid);
   // console.log("rName:", recipientName);
@@ -167,7 +166,7 @@ export default function Chat() {
           )
         );
 
-        const conversationId = allConversations[0]?.id;
+        const conversationId = allConversations[0]?.conversationId;
         setConversationId(conversationId);
         if (conversationId) {
           const messages = await getAllMessagesByConversationId(conversationId);
@@ -177,7 +176,7 @@ export default function Chat() {
           if (allConversations.length) {
             setRecipientUid(
               allConversations.filter(
-                (conversation) => conversation.id === conversationId
+                (conversation) => conversation.conversationId === conversationId
               )[0]?.recipientUid
             );
           }
@@ -197,10 +196,16 @@ export default function Chat() {
     }
 
     // update currentMessages
-    if (conversationDict[conversationId])
+    if (conversationId && conversationDict[conversationId]) {
       setCurrentMessages(conversationDict[conversationId]);
-  }, [conversationDict, conversationId, currentMessages]);
-
+      if (!recipientUid && conversations)
+        setRecipientUid(
+          conversations.filter(
+            (conversation) => conversation.conversationId === conversationId
+          )[0]["recipientUid"]
+        );
+    }
+  }, [conversations, conversationDict, conversationId, currentMessages]);
   const sendMessage = (text) => {
     if (!text) return;
     const message = {
@@ -210,19 +215,10 @@ export default function Chat() {
       timestamp: new Date().getTime(),
     };
 
-    const newMessages = conversationDict[conversationId];
-    if (newMessages) {
-      newMessages.push(message);
-      setConversationDict({
-        ...conversationDict,
-        [conversationId]: newMessages,
-      });
-    }
-
     setConversations(
       conversations
         .map((conversation) => {
-          if (conversation.id === conversationId)
+          if (conversation.conversationId === conversationId)
             conversation = {
               ...conversation,
               lastSenderName: userInfo.name,
@@ -258,7 +254,7 @@ export default function Chat() {
               conversation={conversation}
               chosenId={conversationId}
               onClick={() => {
-                onConversationClick(conversation.id);
+                onConversationClick(conversation.conversationId);
               }}
             />
           ))}
@@ -269,7 +265,7 @@ export default function Chat() {
           <CurrentConversation
             conversation={
               conversations.filter(
-                (conversation) => conversation.id === conversationId
+                (conversation) => conversation.conversationId === conversationId
               )[0]
             }
             messages={currentMessages}
@@ -280,21 +276,21 @@ export default function Chat() {
       )}
 
       {/* Initiate conversation with specified recipientUid && text */}
-      {/* <input
-        type="text"
-        placeholder="to..."
-        value={recipientUid}
-        onChange={(e) => setRecipientUid(e.target.value)}
-      />
-      <br />
-      <input
-        type="text"
-        placeholder="message..."
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-      />
-      <br />
-      <button onClick={() => sendMessage(text)}>send</button> */}
+      {/*<input*/}
+      {/*  type="text"*/}
+      {/*  placeholder="to..."*/}
+      {/*  value={recipientUid}*/}
+      {/*  onChange={(e) => setRecipientUid(e.target.value)}*/}
+      {/*/>*/}
+      {/*<br />*/}
+      {/*<input*/}
+      {/*  type="text"*/}
+      {/*  placeholder="message..."*/}
+      {/*  value={text}*/}
+      {/*  onChange={(e) => setText(e.target.value)}*/}
+      {/*/>*/}
+      {/*<br />*/}
+      {/*<button onClick={() => sendMessage(text)}>send</button>*/}
     </div>
   );
 }

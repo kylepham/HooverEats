@@ -132,20 +132,20 @@ export default function Profile() {
 
   const addPreference = (e) => {
     if (e.target.id === "prefYear") {
-      const prefYears = userInfo.prefYear ?? Array();
+      const prefYears = userInfo.prefYear ?? [];
       const yearValue = numericYearCollegeYearConvert(e.target.value, false);
       if (!prefYears.includes(yearValue)) {
         prefYears.push(yearValue);
       }
       setUserInfo({ ...userInfo, prefYear: prefYears });
     } else if (e.target.id === "prefMajor") {
-      const prefMajors = userInfo.prefMajor ?? Array();
+      const prefMajors = userInfo.prefMajor ?? [];
       if (!prefMajors.includes(e.target.value)) {
         prefMajors.push(e.target.value);
       }
       setUserInfo({ ...userInfo, prefMajor: prefMajors });
     } else if (e.target.id === "hobby") {
-      const userHobbies = userInfo.hobbies ?? Array();
+      const userHobbies = userInfo.hobbies ?? [];
       if (!userHobbies.includes(e.target.value)) {
         userHobbies.push(e.target.value);
       }
@@ -170,7 +170,7 @@ export default function Profile() {
       }
       setUserInfo({ ...userInfo, prefMajor: prefMajors });
     } else if (type === "hobby") {
-      const userHobbies = userInfo.hobbies ?? Array();
+      const userHobbies = userInfo.hobbies ?? [];
       const index = userHobbies.indexOf(value);
       if (index !== -1) {
         userHobbies.splice(index, 1);
@@ -178,7 +178,6 @@ export default function Profile() {
       setUserInfo({ ...userInfo, hobby: userHobbies });
     }
   };
-
   if (!userInfo) return <Redirect to="/" />;
   return (
     <div>

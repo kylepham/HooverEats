@@ -49,7 +49,8 @@ public class MessagingController {
 
 		Message sentMessage = messageRepository.save(receivedMessage);
 
-		messagingTemplate.convertAndSendToUser(receivedMessage.getRecipientUid(),"/queue/messages", sentMessage);
+		messagingTemplate.convertAndSendToUser(receivedMessage.getRecipientUid(), "/queue/messages", sentMessage);
+		messagingTemplate.convertAndSendToUser(receivedMessage.getSenderUid(), "/queue/messages", sentMessage);
 
 	}
 
