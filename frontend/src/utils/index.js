@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getIdToken } from "../firebase";
+import {getIdToken} from "../firebase";
 
 export const postAuthInfo = async () => {
   try {
@@ -81,9 +81,21 @@ export const setLocalStorage = (key, value) => {
 
 export const getLocalStorage = (key) => {
   try {
-    const value = JSON.parse(window.localStorage.getItem(key));
+    return JSON.parse(window.localStorage.getItem(key));
+  } catch (e) {
+    console.warn(e);
+  }
+};
 
-    return value;
+export const getMatchings = async () => {
+  try {
+    return (
+      await axios.get("https://twiki.csc.depauw.edu/api/matching", {
+        headers: {
+          authorization: await getIdToken(),
+        },
+      })
+    ).data;
   } catch (e) {
     console.warn(e);
   }

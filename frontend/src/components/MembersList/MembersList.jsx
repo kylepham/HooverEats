@@ -15,6 +15,20 @@ const MemberTag = ({ image, title, content }) => {
   );
 };
 
+export const UserTag = ({ image, title, content }) => {
+  return (
+    <div className={styles.userTag}>
+      <div className={styles.memberTag__img}>
+        <img src={image} alt="" />
+      </div>
+      <div className={styles.memberTag__text}>
+        <h2>{title}</h2>
+        <p>{content}</p>
+      </div>
+    </div>
+  );
+};
+
 function MembersList() {
   return (
     <div className={styles.memberList}>

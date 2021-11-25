@@ -25,6 +25,21 @@
   justify-content: center;
 }
 
+.userTag {
+  display: flex;
+  align-items: center;
+  gap: 1.3rem;
+  background-color: var(--background-color);
+  border-radius: 25px;
+  width: 50%;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.memberTag__img {
+  height: fit-content;
+}
+
 .memberTag__img img {
   width: 100px;
   height: 100px;
