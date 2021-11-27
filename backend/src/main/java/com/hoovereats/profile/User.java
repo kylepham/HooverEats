@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Entity // This tells Hibernate to make a table out of this class
@@ -33,25 +33,16 @@ public class User {
 	private List<String> major;
 
 	@Convert(converter = ListStringConverter.class)
-	private List<String> hobbies;
+	private List<String> tags;
 
-	@Convert(converter = ListIntegerConverter.class)
-	@Column(name = "pref_year")
-	private List<Integer> prefYear;
-
-	@Convert(converter = ListStringConverter.class)
-	@Column(name = "pref_major")
-	private List<String> prefMajor;
-
-	@Convert(converter = ListIntegerConverter.class)
-	private List<Integer> priorities;
+	@Convert(converter = ListPreferencesConverter.class)
+	private List<Preference> preferences;
 
 	public User() {
 	}
 
-	public User(String uid, String name, String username, String email, String photoUrl,
-				Swipe type, Integer gradYear, List<String> major, List<String> hobbies,
-				List<Integer> prefYear, List<String> prefMajor, List<Integer> priorities) {
+	public User(String uid, String name, String username, String email, String photoUrl, Swipe type, Integer gradYear,
+				List<String> major, List<String> tags, List<Preference> preferences) {
 		this.uid = uid;
 		this.name = name;
 		this.username = username;
@@ -59,11 +50,9 @@ public class User {
 		this.photoUrl = photoUrl;
 		this.type = type;
 		this.gradYear = gradYear;
-		this.major = (major == null)?Arrays.asList("Undecided"):major;
-		this.hobbies = hobbies;
-		this.prefYear = prefYear;
-		this.prefMajor = prefMajor;
-		this.priorities = (priorities == null)? Arrays.asList(1,1,1):priorities;
+		this.major = (major == null)? Collections.singletonList("Undecided") :major;
+		this.tags = tags;
+		this.preferences = preferences;
 	}
 
 	public String getUid() {
@@ -130,36 +119,20 @@ public class User {
 		this.major = major;
 	}
 
-	public List<String> getHobbies() {
-		return hobbies;
+	public List<String> getTags() {
+		return tags;
 	}
 
-	public void setHobbies(List<String> hobbies) {
-		this.hobbies = hobbies;
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 
-	public List<Integer> getPrefYear() {
-		return prefYear;
+	public List<Preference> getPreferences() {
+		return preferences;
 	}
 
-	public void setPrefYear(List<Integer> prefYear) {
-		this.prefYear = prefYear;
-	}
-
-	public List<String> getPrefMajor() {
-		return prefMajor;
-	}
-
-	public void setPrefMajor(List<String> prefMajor) {
-		this.prefMajor = prefMajor;
-	}
-
-	public List<Integer> getPriorities() {
-		return priorities;
-	}
-
-	public void setPriorities(List<Integer> priorities) {
-		this.priorities = priorities;
+	public void setPreferences(List<Preference> preferences) {
+		this.preferences = preferences;
 	}
 
 	@Override
@@ -169,13 +142,12 @@ public class User {
 				", name='" + name + '\'' +
 				", username='" + username + '\'' +
 				", email='" + email + '\'' +
+				", photoUrl='" + photoUrl + '\'' +
 				", type=" + type +
-				", gradYear='" + gradYear + '\'' +
-				", major='" + major + '\'' +
-				", hobbies=" + hobbies +
-				", prefYear=" + prefYear +
-				", prefMajor=" + prefMajor +
-				", priorities=" + priorities +
+				", gradYear=" + gradYear +
+				", major=" + major +
+				", tags=" + tags +
+				", preferences=" + preferences +
 				'}';
 	}
 }

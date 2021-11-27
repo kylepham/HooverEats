@@ -2,6 +2,7 @@ package com.hoovereats.matching;
 
 import com.google.firebase.auth.UserRecord;
 import com.hoovereats.matching.responses.MatchingResultResponse;
+import com.hoovereats.profile.Preference;
 import com.hoovereats.profile.User;
 import com.hoovereats.profile.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.TreeMap;
 
 @RestController
 public class MatchingController {
@@ -25,6 +28,11 @@ public class MatchingController {
 				userRepository.findReceivingUser());
 	}
 
+	@GetMapping(value="/matching-preferences-data", produces = MediaType.APPLICATION_JSON_VALUE)
+	public TreeMap<String, Collection<String>> getMatchingPreferencesData() {
+		return MatchingPreferencesData.MATCHING_PREFERENCES_DATA;
+	}
+
 	static List<MatchingResultResponse> ranking(User currentUser, List<User> otherUsers) {
 		List<MatchingResultResponse> matchingResultResponses = new ArrayList<>();
 		for (User otherUser : otherUsers) {
@@ -36,40 +44,35 @@ public class MatchingController {
 	}
 
 	static MatchingResultResponse calculateScore(User currentUser, User otherUser) {
-		double score = 0;
-		MatchingResultResponse.MatchingReason reason = new MatchingResultResponse.MatchingReason();
-		List<Integer> userPriority = currentUser.getPriorities();
-		for (int category = 0; category < userPriority.size(); category++) {
-			int weight = userPriority.get(category); //year->major->hobbies
-			switch (category) {
-				case 0:
-					if (currentUser.getPrefYear().contains(otherUser.getGradYear())) {
-						score += weight;
-						reason.gradYear = otherUser.getGradYear();
+		int score = 0;
+		ArrayList<String> reasons = new ArrayList<>();
+		for (Preference preference : currentUser.getPreferences()) {
+			String preferenceName = preference.getPreference();
+			int priority = preference.getPriority();
+			String preferenceType = MatchingPreferencesData.PREFERENCES_LOOKUP.get(preferenceName);
+			switch (preferenceType) {
+				case "Majors":
+					if (otherUser.getMajor().contains(preferenceName)) {
+						score += priority;
+						reasons.add(preferenceName);
 					}
 					break;
-				case 1:
-					for (String otherUserMajor : otherUser.getMajor()) {
-						if (currentUser.getPrefMajor().contains(otherUserMajor)) {
-							score += weight;
-							reason.majors.add(otherUserMajor);
-						}
+				case "Classes":
+					int prefGradYear = MatchingPreferencesData.YEAR_LOOKUP.get(preferenceName);
+					if (otherUser.getGradYear() == prefGradYear) {
+						score += priority;
+						reasons.add(preferenceName);
 					}
 					break;
-				case 2:
-					if (currentUser.getHobbies() != null && otherUser.getHobbies() != null) {
-						double smallScore = (double) weight/currentUser.getHobbies().size();
-						for (String hobby : currentUser.getHobbies()) {
-							if (otherUser.getHobbies().contains(hobby)) {
-								score += smallScore;
-								reason.hobbies.add(hobby);
-							}
-						}
+				default:
+					if (otherUser.getTags() != null && otherUser.getTags().contains(preferenceName)) {
+						score += priority;
+						reasons.add(preferenceName);
 					}
 					break;
 			}
 		}
-		return new MatchingResultResponse(otherUser, score, reason);
+		return new MatchingResultResponse(otherUser, score, reasons);
 	}
 
 }

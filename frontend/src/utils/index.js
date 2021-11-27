@@ -100,3 +100,17 @@ export const getMatchings = async () => {
     console.warn(e);
   }
 };
+
+export const getMatchingPreferencesData = async () => {
+  try {
+    return (
+      await axios.get("https://twiki.csc.depauw.edu/api/matching-preferences-data", {
+        headers: {
+          authorization: await getIdToken(),
+        },
+      })
+    ).data;
+  } catch (e) {
+    console.warn(e);
+  }
+};
