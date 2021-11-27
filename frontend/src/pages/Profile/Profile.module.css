@@ -2,11 +2,13 @@
   display: flex;
   justify-content: center;
   margin: 2rem 0px;
+  color: var(--background-color);
 }
 
 .profile__avatar {
   display: flex;
   flex-direction: column;
+  max-width: 200px;
 }
 
 .profile__badge {
@@ -82,10 +84,9 @@ button:hover {
   align-items: center;
   justify-content: space-between;
 }
-
 .profile__preferences__slider {
   width: 50%;
-  margin-right: 69px;
+  margin: 0 40px;
 }
 
 .profile__preferences__selected {
@@ -125,4 +126,41 @@ button:hover {
 .profile__update button {
   width: auto;
   font-size: 1rem;
+}
+
+.container {
+  position: relative;
+  padding: 10px;
+  background-color: var(--main-color);
+  max-width: 200px;
+  /*height:400px;*/
+  margin: auto;
+  border-radius: 10px;
+}
+
+.slide {
+  margin: auto;
+  /*background-color: var(--main-color);*/
+  border-radius: 10px;
+  /*padding: 10px;*/
+}
+
+.slide span {
+  display : table;
+  margin: 0 auto 10px auto;
+}
+
+.slide select {
+  margin: auto;
+  width: 100%;
+  color: grey;
+  border-radius: 5px;
+}
+
+.slide option {
+  margin: auto;
+  padding: 1px 10px;
+  /*display: flex;*/
+  /*flex-wrap: wrap;*/
+  word-wrap:break-word
 }

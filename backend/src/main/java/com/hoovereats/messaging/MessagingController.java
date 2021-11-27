@@ -54,6 +54,13 @@ public class MessagingController {
 
 	}
 
+//	@GetMapping(value="/delete/{conversationId}")
+//	public void deleteConversations(@PathVariable int conversationId) {
+//		conversationRepository.deleteById(conversationId);
+//		List<Message> messages = messageRepository.findMessageByConversationId(conversationId);
+//		messageRepository.deleteAll(messages);
+//	}
+
 	@GetMapping("/conversations")
 	public String getConversations (@RequestAttribute("userRecord") UserRecord userRecord) {
 		List<Conversation> conversationList = conversationRepository.findTop10ByUserId(userRecord.getUid());

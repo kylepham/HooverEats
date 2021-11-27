@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { SocketContext } from "../../contexts/SocketContext";
 import styles from "./Matching.module.css";
-import {getMatchings, getProfile} from "../../utils";
+import {getMatchings} from "../../utils";
 import {UserTag} from "../../components/MembersList/MembersList";
 import Dialog from '@mui/material/Dialog';
 import {Alert, Fade} from "@mui/material";
@@ -11,7 +11,7 @@ import {Link} from "react-router-dom";
 
 export default function Profile() {
   const {
-    userInfo, setUserInfo
+    userInfo
   } = useContext(AuthContext);
 
   const {
@@ -28,8 +28,11 @@ export default function Profile() {
     const getMatching = async () => {
       setUserMatching(await getMatchings());
     };
-    if (socketConnected && userInfo)
-    getMatching();
+    const interval = setInterval(() => {
+      if (socketConnected && userInfo)
+        getMatching();
+    }, 5000);
+    return () => clearInterval(interval);
   }, [socketConnected, userInfo]);
 
   const mainColor = "#e4bb4a"
@@ -44,10 +47,8 @@ export default function Profile() {
   };
 
   const getReason = (reason) => {
-    return reason.gradYear + " " + reason.majors.toString() + " " + reason.hobbies.toString();
-  }
-  const changePopupMessage = (e) => {
-    setPopupMessage(e.target.value);
+    if (reason && reason.length > 0)
+      return "Matched based on: " + reason.toString();
   }
 
   const sendMessage = (text) => {

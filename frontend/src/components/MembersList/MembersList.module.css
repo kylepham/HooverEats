@@ -27,13 +27,21 @@
 
 .userTag {
   display: flex;
-  align-items: center;
   gap: 1.3rem;
   background-color: var(--background-color);
   border-radius: 25px;
-  width: 50%;
-  margin: 0 auto;
-  justify-content: center;
+  width: 40%;
+  height: 100px;
+  margin: 10px auto;
+  justify-content: left;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.userTag div img {
+  width: 75px;
+  height: 75px;
+  border-radius: 100px;
 }
 
 .memberTag__img {
@@ -45,7 +53,11 @@
   height: 100px;
   border-radius: 100px;
 }
+.memberTag__text {
 
+}
 .memberTag__text p {
   color: var(--main-color);
+  width: fit-content;
+  overflow: auto;
 }

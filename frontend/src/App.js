@@ -54,7 +54,7 @@ function App() {
 
         <Switch>
           <Route exact path="/">
-            {socketConnected?<Matching />:<Home />}
+            {socketConnected && userInfo?<Matching />:<Home />}
           </Route>
 
         <Route path="/login">
