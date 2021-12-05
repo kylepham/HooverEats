@@ -2,6 +2,7 @@ package com.hoovereats.profile;
 
 import javax.persistence.AttributeConverter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class ListStringConverter implements AttributeConverter<List<String>, String> {
@@ -10,7 +11,7 @@ public class ListStringConverter implements AttributeConverter<List<String>, Str
 
 	@Override
 	public List<String> convertToEntityAttribute(String s) {
-		if (s == null) return null;
+		if (s == null) return Collections.emptyList();
 		return Arrays.asList(s.split(SEPARATOR));
 	}
 

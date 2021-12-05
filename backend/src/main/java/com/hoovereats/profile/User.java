@@ -1,13 +1,17 @@
 package com.hoovereats.profile;
 
+import com.hoovereats.matching.MatchingPreferencesData;
+
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
@@ -29,20 +33,58 @@ public class User {
 	@Column(name = "grad_year")
 	private Integer gradYear;
 
+	//profile:
+
+	@Transient
 	@Convert(converter = ListStringConverter.class)
-	private List<String> major;
+	private List<String> classes;
 
 	@Convert(converter = ListStringConverter.class)
-	private List<String> tags;
+	private List<String> majors;
 
-	@Convert(converter = ListPreferencesConverter.class)
-	private List<Preference> preferences;
+	@Convert(converter = ListStringConverter.class)
+	private List<String> greek;
+
+	@Convert(converter = ListStringConverter.class)
+	private List<String> programs;
+
+	@Convert(converter = ListStringConverter.class)
+	private List<String> hobbies;
+
+	private String bio;
+
+	//preferences:
+	@Column(name = "pref_classes")
+	@Convert(converter = ListStringConverter.class)
+	private List<String> prefClasses;
+
+	@Column(name = "pref_majors")
+	@Convert(converter = ListStringConverter.class)
+	private List<String> prefMajors;
+
+	@Column(name = "pref_greek")
+	@Convert(converter = ListStringConverter.class)
+	private List<String> prefGreek;
+
+	@Column(name = "pref_programs")
+	@Convert(converter = ListStringConverter.class)
+	private List<String> prefPrograms;
+
+	@Column(name = "pref_hobbies")
+	@Convert(converter = ListStringConverter.class)
+	private List<String> prefHobbies;
+
+	@Convert(converter = ListPrioritiesConverter.class)
+	@SuppressWarnings("JpaAttributeTypeInspection")
+	private Map<String, Integer> priorities;
 
 	public User() {
 	}
 
 	public User(String uid, String name, String username, String email, String photoUrl, Swipe type, Integer gradYear,
-				List<String> major, List<String> tags, List<Preference> preferences) {
+				List<String> majors, List<String> greek, List<String> programs, List<String> hobbies, String bio,
+				List<String> prefClasses, List<String> prefMajors, List<String> prefGreek, List<String> prefPrograms,
+				List<String> prefHobbies, Map<String, Integer> priorities) {
 		this.uid = uid;
 		this.name = name;
 		this.username = username;
@@ -50,9 +92,17 @@ public class User {
 		this.photoUrl = photoUrl;
 		this.type = type;
 		this.gradYear = gradYear;
-		this.major = (major == null)? Collections.singletonList("Undecided") :major;
-		this.tags = tags;
-		this.preferences = preferences;
+		this.majors = (majors == null)? Collections.singletonList("Undecided") : majors;
+		this.greek = (greek == null)?  Collections.singletonList("No Affiliation") : greek;
+		this.programs = (programs == null)? Collections.emptyList() : programs;
+		this.hobbies = (hobbies == null)? Collections.emptyList() : hobbies;
+		this.bio = (bio == null)? "":bio;
+		this.prefClasses = (prefClasses == null)? Collections.emptyList() : prefClasses;
+		this.prefMajors = (prefMajors == null)? Collections.emptyList() : prefMajors;
+		this.prefGreek = (prefGreek == null)? Collections.emptyList() : prefGreek;
+		this.prefPrograms = (prefPrograms == null)? Collections.emptyList() : prefPrograms;
+		this.prefHobbies = (prefHobbies == null)? Collections.emptyList() : prefHobbies;
+		this.priorities = (priorities == null)? ListPrioritiesConverter.DEFAULT_PRIORITIES_MAP : priorities;
 	}
 
 	public String getUid() {
@@ -111,28 +161,96 @@ public class User {
 		this.gradYear = gradYear;
 	}
 
-	public List<String> getMajor() {
-		return major;
+	public List<String> getClasses() {
+		return Collections.singletonList(MatchingPreferencesData.YEAR_TO_STRING_LOOKUP.get(gradYear));
 	}
 
-	public void setMajor(List<String> major) {
-		this.major = major;
+	public List<String> getMajors() {
+		return majors;
 	}
 
-	public List<String> getTags() {
-		return tags;
+	public void setMajors(List<String> majors) {
+		this.majors = majors;
 	}
 
-	public void setTags(List<String> tags) {
-		this.tags = tags;
+	public List<String> getGreek() {
+		return greek;
 	}
 
-	public List<Preference> getPreferences() {
-		return preferences;
+	public void setGreek(List<String> greek) {
+		this.greek = greek;
 	}
 
-	public void setPreferences(List<Preference> preferences) {
-		this.preferences = preferences;
+	public List<String> getPrograms() {
+		return programs;
+	}
+
+	public void setPrograms(List<String> programs) {
+		this.programs = programs;
+	}
+
+	public List<String> getHobbies() {
+		return hobbies;
+	}
+
+	public void setHobbies(List<String> hobbies) {
+		this.hobbies = hobbies;
+	}
+
+	public String getBio() {
+		return bio;
+	}
+
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
+
+	public List<String> getPrefClasses() {
+		return prefClasses;
+	}
+
+	public void setPrefClasses(List<String> prefClasses) {
+		this.prefClasses = prefClasses;
+	}
+
+	public List<String> getPrefMajors() {
+		return prefMajors;
+	}
+
+	public void setPrefMajors(List<String> prefMajors) {
+		this.prefMajors = prefMajors;
+	}
+
+	public List<String> getPrefGreek() {
+		return prefGreek;
+	}
+
+	public void setPrefGreek(List<String> prefGreek) {
+		this.prefGreek = prefGreek;
+	}
+
+	public List<String> getPrefPrograms() {
+		return prefPrograms;
+	}
+
+	public void setPrefPrograms(List<String> prefPrograms) {
+		this.prefPrograms = prefPrograms;
+	}
+
+	public List<String> getPrefHobbies() {
+		return prefHobbies;
+	}
+
+	public void setPrefHobbies(List<String> prefHobbies) {
+		this.prefHobbies = prefHobbies;
+	}
+
+	public Map<String, Integer> getPriorities() {
+		return priorities;
+	}
+
+	public void setPriorities(Map<String, Integer> priorities) {
+		this.priorities = priorities;
 	}
 
 	@Override
@@ -145,9 +263,17 @@ public class User {
 				", photoUrl='" + photoUrl + '\'' +
 				", type=" + type +
 				", gradYear=" + gradYear +
-				", major=" + major +
-				", tags=" + tags +
-				", preferences=" + preferences +
+				", classes=" + classes +
+				", majors=" + majors +
+				", greek=" + greek +
+				", programs=" + programs +
+				", hobbies=" + hobbies +
+				", prefClasses=" + prefClasses +
+				", prefMajors=" + prefMajors +
+				", prefGreek=" + prefGreek +
+				", prefPrograms=" + prefPrograms +
+				", prefHobbies=" + prefHobbies +
+				", priorities=" + priorities +
 				'}';
 	}
 }

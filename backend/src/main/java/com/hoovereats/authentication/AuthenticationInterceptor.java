@@ -21,6 +21,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 			return true;
 		}
 
+		if ("/api/options-info".equals(request.getRequestURI())) {
+			return true;
+		}
+
 		if("1".equals(request.getParameter("debug"))){
 			return true;
 		}
