@@ -21,7 +21,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry
 				.addEndpoint("/ws")
-				.setAllowedOrigins("https://twiki.csc.depauw.edu:3001", "http://twiki.csc.depauw.edu:3000", "http://localhost:3000");
+				.setAllowedOrigins("http://twiki.csc.depauw.edu:3001", "http://twiki.csc.depauw.edu:8081",
+						"http://twiki.csc.depauw.edu:3000", "http://localhost:3000", "*", "-");
 	}
 
 }
